@@ -1,9 +1,8 @@
 import React from 'react';
+import AppBody from '../app-body-component/AppBodyComponent';
 
 const HomeComponent = (props) => (
-  <div>
-    <h1>Hello Home</h1>
-  </div>
+  <AppBody />
 )
 
-export default HomeComponent
+export default HomeComponent;

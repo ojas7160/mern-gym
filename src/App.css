@@ -1,5 +1,10 @@
 .App {
   text-align: center;
+  background: url("./assets/Gym-background-Small.jpg") center no-repeat;
+  height: 100%;
+  background-attachment: fixed;
+  background-size: cover;
+  padding-bottom: 25px;
 }
 
 .App-logo {
@@ -10,6 +15,7 @@
 li {
   list-style: none;
 }
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

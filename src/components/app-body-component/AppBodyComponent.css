@@ -1,0 +1,13 @@
+.div-style {
+  background-color: white;
+  margin: 25px;
+  padding: 12px;
+  border-radius: 10px;
+  height: 100vh;
+  align-content: center;
+  border: 1px solid black;
+}
+
+.div-style:last-child {
+  margin-bottom: 0px;
+}

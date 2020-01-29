@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import './login-component.css'
+import './login-component.css';
+import Axios from '../../axios-instance';
 
-class LoginComponent extends React.Component {
+class LoginComponent extends Component {
     constructor(props) {
         super(props)
-        this.state = { email: '', password: '' , showDetails: false};
+        this.state = { email: '', password: '' , showDetails: false, userDetail: {email: '', password: ''}};
 
         this.onchangeEmail = this.onchangeEmail.bind(this);
         this.onchangePassword = this.onchangePassword.bind(this);
@@ -13,15 +14,31 @@ class LoginComponent extends React.Component {
 
     onchangeEmail(event) {
         this.setState({ email: event.target.value });
+        if(!event.target.value.length) {
+            this.setState({showDetails: false})
+        }
     }
 
     onchangePassword(event) {
         this.setState({ password: event.target.value });
+        if(!event.target.value.length) {
+            this.setState({showDetails: false})
+        }
     }
 
     handleSubmit(event) {
         console.log('A name was submitted:', this.state.email, this.state.password);
-        this.setState({showDetails:true})
+        this.setState((prevState) => {
+            return {showDetails: true, userDetail: {email: prevState.email, password: prevState.password}}
+        })
+
+        Axios.post('/api/user/login', {email: this.state.email, password: this.state.password})
+		.then(res => {
+			console.log(res)
+		})
+		.catch(err => {
+			console.log(err)
+		})
         event.preventDefault();
     }
 
@@ -50,10 +67,10 @@ class LoginComponent extends React.Component {
                                     <input type="submit" value="Submit" />
                                 </div>
                             </form >
-                            {this.state.showDetails ? (<div className="displayLoginScreen">
+                            { (this.state.showDetails) ? (<div className="displayLoginScreen">
                                 <h3> Current User </h3>
-                                <p> {this.state.email} </p>
-                                <p> {this.state.password} </p>
+                                <p> {this.state.userDetail.email} </p>
+                                <p> {this.state.userDetail.password} </p>
                             </div>) : null }
                         </div>
 

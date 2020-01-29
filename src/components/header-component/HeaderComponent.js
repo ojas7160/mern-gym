@@ -4,11 +4,22 @@ import { NavLink, Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 
 const HeaderComponent = (props) => {
-  let uls = []
+  let leftuls = []
+  let rightuls = []
   let index = 0
-  props.lis.forEach(li => {
-    uls.push(
-      <Nav.Item key={index++} className="mr-15">
+  console.log('dfdsf', props);
+  
+  props.leftlist.forEach(li => {
+    leftuls.push(
+      <Nav.Item key={index++} className={"mr-15"}>
+        <NavLink activeClassName="active" className="color-white" to={li.link}>{li.name}</NavLink>
+      </Nav.Item>
+    )
+  })
+
+  props.rightlist.forEach(li => {
+    rightuls.push(
+      <Nav.Item key={index++} className={"mr-15"}>
         <NavLink activeClassName="active" className="color-white" to={li.link}>{li.name}</NavLink>
       </Nav.Item>
     )
@@ -16,9 +27,12 @@ const HeaderComponent = (props) => {
   return (    
     <div className="header-wrapper">
       <Navbar bg="dark" variant="dark" sticky="top">
-        <Navbar.Brand href="#home">Ojas</Navbar.Brand>
+        <Navbar.Brand href="/">Ojas</Navbar.Brand>
         <Nav className="mr-auto">
-          {uls}
+          {leftuls}
+        </Nav>
+        <Nav className="justify-content-end">
+          {rightuls}
         </Nav>
       </Navbar>
     </div>

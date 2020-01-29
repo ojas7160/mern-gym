@@ -6,11 +6,18 @@ import Routes from './components/routes/routes';
 
 class App extends Component {
   render() {
-    const header = [{link: '/', name: 'Home'}, {link: '/dashboard', name: 'Dashboard'}]
+    const leftHeader = [
+      {link: '/home', name: 'Home' , type:'left'}, 
+      {link: '/dashboard', name: 'Dashboard', type:'left'},
+    ]
+
+    const rightHeader = [
+      {link:'/login', name:'Login', type:'right'}
+    ]
     
     return (
       <div className="App">
-        <HeaderComponent lis={header} />
+        <HeaderComponent leftlist={leftHeader} rightlist={rightHeader}/>
         <Routes />
       </div>
     );

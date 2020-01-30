@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const instance = Axios.create({
-    baseURL: 'http://localhost:3001'
+    baseURL: 'http://192.168.1.206:3001'
 })
 
 export default instance;

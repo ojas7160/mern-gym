@@ -6,8 +6,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 const HeaderComponent = (props) => {
   let leftuls = []
   let rightuls = []
-  let index = 0
-  console.log('dfdsf', props);
+  let index = 0;
   
   props.leftlist.forEach(li => {
     leftuls.push(

@@ -3,7 +3,6 @@ import './App.css';
 import HeaderComponent from './components/header-component/HeaderComponent';
 import Routes from './components/routes/routes';
 
-
 class App extends Component {
   render() {
     const leftHeader = [

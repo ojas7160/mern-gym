@@ -4,7 +4,7 @@ import DashboardComponent from '../dashboard-component/DashboardComponent';
 import HomeComponent from '../home-component/HomeComponent';
 import NotFoundComponent from '../not-found/NotFoundComponent';
 import PrivateRoute from '../auth/route-guards/PrivateRoute';
-import LoginComponent from '../login/login-component'
+import LoginComponent from '../../containers/login/login-component'
 
 const routes = (props) => {
   const authed = JSON.parse(localStorage.getItem('permit'));

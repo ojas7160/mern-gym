@@ -126,7 +126,8 @@
     text-align: center;
   }
   
-  .card .button-container button {
+  .card .button-container input[type="submit"],
+  .card .button-container input[type="reset"] {
     outline: 0;
     cursor: pointer;
     position: relative;
@@ -143,14 +144,16 @@
     transition: 0.3s ease;
   }
   
-  .card .button-container button span {
+  .card .button-container input[type="submit"] span,
+  .card .button-container input[type="reset"] span {
     position: relative;
     z-index: 1;
     color: #999;
     transition: 0.3s ease;
   }
   
-  .card .button-container button:before {
+  .card .button-container input[type="submit"]:before,
+  .card .button-container input[type="reset"]:before {
     content: "";
     position: absolute;
     top: 50%;
@@ -165,28 +168,37 @@
     transition: 0.3s ease;
   }
   
-  .card .button-container button:hover,
-  .card .button-container button:active,
-  .card .button-container button:focus {
+  .card .button-container input[type="submit"]:hover,
+  .card .button-container input[type="submit"]:active,
+  .card .button-container input[type="submit"]:focus,
+  .card .button-container input[type="reset"]:hover {
     border-color: #ed2553;
   }
   
-  .card .button-container button:hover span,
-  .card .button-container button:active span,
-  .card .button-container button:focus span {
+  .card .button-container input[type="submit"]:hover span,
+  .card .button-container input[type="submit"]:active span,
+  .card .button-container input[type="submit"]:focus span {
     color: #ed2553;
   }
   
-  .card .button-container button:active span,
-  .card .button-container button:focus span {
+  .card .button-container input[type="submit"]:active span,
+  .card .button-container input[type="submit"]:focus span {
     color: #ffffff;
   }
   
-  .card .button-container button:active:before,
-  .card .button-container button:focus:before {
+  .card .button-container input[type="submit"]:active:before,
+  .card .button-container input[type="submit"]:focus:before {
     opacity: 1;
     -webkit-transform: scale(10);
     transform: scale(10);
+  }
+
+  .card .button-container input[type="submit"]:disabled,
+  .card .button-container input[type="submit"]:disabled:hover{
+    cursor: not-allowed;
+    color: #999;
+    background: #ccc;
+    border-color: #999;
   }
   
   .card .footer {

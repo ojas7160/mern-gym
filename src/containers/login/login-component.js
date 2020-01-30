@@ -7,7 +7,8 @@ import toastr from 'toastr';
 class LoginComponent extends Component {
     constructor(props) {
         super(props)
-        this.state = { email: '', password: '' , showDetails: false, emailValid:false, userDetail: {email: '', password: ''}};
+        this.state = { email: '', password: '' , showDetails: false, emailValid:false, userDetail: {email: '', password: ''}, showPassword: false};
+
         this.onchangeEmail = this.onchangeEmail.bind(this);
         this.onchangePassword = this.onchangePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -53,6 +54,9 @@ class LoginComponent extends Component {
     resetForm = () => {
         this.setState({email:"",password:"", showDetails: false})
     }
+    showPassword = () => {
+        this.setState(prevState => {return {showPassword: !prevState.showPassword}})
+    }
 
     render() {
         return (
@@ -70,8 +74,9 @@ class LoginComponent extends Component {
                                     {this.state.emailValid ? null : (<span className="error"> Email Address is Required </span>)}
                                 </div>
                                 <div className="input-container">
-                                    <input type="password" name="password" value={this.state.password} onChange={this.onchangePassword} required="required" />
+                                    <input type={this.state.showPassword ? 'text' : 'password'} name="password" value={this.state.password} onChange={this.onchangePassword} required="required" />
                                     <label>Password</label>
+                                    <span style={{cursor: 'pointer'}} onClick={this.showPassword}>{this.state.showPassword ? 'Hide' : 'Show'}</span>
                                     <div className="bar"></div>
                                     {/* <span className="error"> Password is Required </span> */}
                                 </div>
@@ -79,7 +84,7 @@ class LoginComponent extends Component {
                                     <input type="submit" value="Login" style={{marginRight:'15px'}} disabled={!this.state.emailValid} />
                                     <input type="reset" value="Reset" onClick={this.resetForm}/>
                                 </div>
-                            </form >
+                            </form>
                             { (this.state.showDetails) ? (<div className="displayLoginScreen">
                                 <h3> Entered Details </h3>
                                 <p> {this.state.userDetail.email} </p>

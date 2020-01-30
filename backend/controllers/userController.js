@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-var userLogin = (req, res, next) => {
+exports.userLogin = (req, res, next) => {
   let fetchedUser;
   User.findOne({membershipNumber: req.body.membershipNumber}).
   then((user) => {
@@ -32,4 +32,24 @@ var userLogin = (req, res, next) => {
   })
 } 
 
-module.exports = userLogin;
+
+exports.createUser = (req, res, next) => {
+  bcrypt.hash(req.body.password, 10).then(hashedPassword => {
+    const user = new User({
+      email: req.body.email,
+      password: hashedPassword
+    })
+
+    user.save()
+    .then(newUser => {
+      res.status(201).json({
+        message: 'Saved',
+        user: newUser
+      })
+    }).catch(err => {
+      res.status(401).json({
+        error: err
+      })
+    })
+  })
+}

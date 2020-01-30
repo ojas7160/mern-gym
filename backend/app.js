@@ -29,6 +29,7 @@ const onError = (err) => {
 }
 
 const port = normalizePort(process.env.PORT) || 3001;
+console.log(port)
 server.set("port", port)
 
 const setServer = http.createServer(server);

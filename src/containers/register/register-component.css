@@ -51,7 +51,8 @@
     margin: 0 60px 50px;
   }
   
-  .card .input-container input {
+  .card .input-container input,
+  .card .input-container select {
     outline: none;
     z-index: 1;
     position: relative;
@@ -75,7 +76,8 @@
     width: 50%;
   }
   
-  .card .input-container input:valid ~ label {
+  .card .input-container input:valid ~ label,
+  .card .input-container input[type="date"] ~ label {
     color: #9d9d9d;
     -webkit-transform: translate(-12%, -50%) scale(0.75);
     transform: translate(-12%, -50%) scale(0.75);

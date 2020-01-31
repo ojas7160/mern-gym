@@ -2,64 +2,66 @@ import React, { Component } from 'react';
 import './login-component.css';
 import Axios from '../../axios-instance';
 import toastr from 'toastr';
+import FontAwesome from 'react-fontawesome'
 import { withRouter } from 'react-router-dom'
 
 
 class LoginComponent extends Component {
     constructor(props) {
         super(props)
-        this.state = { email: '', password: '' , showDetails: false, emailValid:false, userDetail: {email: '', password: ''}, showPassword: false, authed: localStorage.getItem('token')};
+        this.state = { email: '', password: '' , showDetails: false, emailValid:true, passwordValid: true, userDetail: {email: '', password: ''}, showPassword: false, authed: localStorage.getItem('token')};
 
         this.onchangeEmail = this.onchangeEmail.bind(this);
         this.onchangePassword = this.onchangePassword.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         console.log(this.props)
     }
 
     onchangeEmail(event) {
         this.setState({ email: event.target.value });
-        if(!event.target.value.length) {
-            this.setState({showDetails: false, emailValid:false})
+        if (!event.target.value.length) {
+            this.setState({ showDetails: false, emailValid: false })
         }
-        else{
-            this.setState({emailValid:true})
+        else {
+            this.setState({ emailValid: true })
         }
     }
 
     onchangePassword(event) {
         this.setState({ password: event.target.value });
-        if(!event.target.value.length) {
-            this.setState({showDetails: false})
+        if (!event.target.value.length) {
+            this.setState({ showDetails: false, passwordValid: false })
+        }
+        else {
+            this.setState({ passwordValid: true })
         }
     }
 
-    handleSubmit = (event) => {
-        this.setState((prevState, props) => {
-            return {userDetail: {email: prevState.email, password: prevState.password}}
+    handleSubmit(event) {
+        this.setState((prevState) => {
+            return { showDetails: true, userDetail: { email: prevState.email, password: prevState.password } }
         })
-        Axios.post('/api/user/login', {email: this.state.email, password: this.state.password})
-		.then((res) => {
-            toastr.success(res.data.message, 'Success!');
-            localStorage.setItem('loginUser', res.data.user.email);
-            localStorage.setItem('token', res.data.token)
-            this.props.history.push('/dashboard');
-            // this.setState({authed: localStorage.getItem('token')});
-            
-		})
-		.catch((err) => {
-            if(err.response){
-                toastr.error(err.response.data.message, 'Error');
-            }
-        })
+
+        Axios.post('/api/user/login', { email: this.state.email, password: this.state.password })
+            .then((res) => {
+                toastr.success(res.data.message, 'Success!');
+                localStorage.setItem('loginUser', res.data.user.email);
+                localStorage.setItem('token', res.data.token)
+                this.props.history.push('/dashboard')
+            })
+            .catch((err) => {
+                if (err.response) {
+                    toastr.error(err.response.data.message, 'Error');
+                }
+            })
         event.preventDefault();
     }
 
     resetForm = () => {
-        this.setState({email:"",password:"", showDetails: false})
-        
+        this.setState({ email: "", password: "", showDetails: false, emailValid: true, passwordValid: true })
     }
     showPassword = () => {
-        this.setState(prevState => {return {showPassword: !prevState.showPassword}})
+        this.setState(prevState => { return { showPassword: !prevState.showPassword } })
     }
 
     render() {
@@ -80,20 +82,27 @@ class LoginComponent extends Component {
                                 <div className="input-container">
                                     <input type={this.state.showPassword ? 'text' : 'password'} name="password" value={this.state.password} onChange={this.onchangePassword} required="required" />
                                     <label>Password</label>
-                                    <span style={{cursor: 'pointer'}} onClick={this.showPassword}>{this.state.showPassword ? 'Hide' : 'Show'}</span>
+                                    {this.state.password ? 
+                                    <FontAwesome
+                                        className="passwordFieldIcon"
+                                        name={this.state.showPassword ? 'eye-slash' : 'eye'}
+                                        onClick={this.showPassword}
+                                        style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)' }}
+                                    />
+                                    : null}
                                     <div className="bar"></div>
-                                    {/* <span className="error"> Password is Required </span> */}
+                                    {this.state.passwordValid ? null : (<span className="error"> Password is Required </span>)}
                                 </div>
                                 <div className="button-container">
-                                    <input type="submit" value="Login" style={{marginRight:'15px'}} disabled={!this.state.emailValid} />
-                                    <input type="reset" value="Reset" onClick={this.resetForm}/>
+                                    <input type="submit" value="Login" style={{ marginRight: '15px' }} disabled={!this.state.emailValid} />
+                                    <input type="reset" value="Reset" onClick={this.resetForm} />
                                 </div>
                             </form>
-                            { (this.state.showDetails) ? (<div className="displayLoginScreen">
+                            {(this.state.showDetails) ? (<div className="displayLoginScreen">
                                 <h3> Entered Details </h3>
                                 <p> {this.state.userDetail.email} </p>
                                 <p> {this.state.userDetail.password} </p>
-                            </div>) : null }
+                            </div>) : null}
                         </div>
 
                     </div>

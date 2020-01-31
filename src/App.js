@@ -54,7 +54,8 @@ class App extends Component {
     ]
     
     const rightHeader = [
-      {link:'/login', name:'Login', type:'right', id: 'logout'}
+      {link:'/login', name:'Login', type:'right'},
+      {link:'/register', name:'Register', type:'right'}
     ]
     
     

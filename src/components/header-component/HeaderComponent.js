@@ -25,6 +25,10 @@ class HeaderComponent extends Component {
     this.props.history.push('/login')
   }
 
+  register = () => {
+    this.props.history.push('/register');
+  }
+
   render() {
     console.log(this.state.authed)
     return (
@@ -43,6 +47,9 @@ class HeaderComponent extends Component {
             <Nav.Item className="mr-15">
               {this.state.authed ? ((<Button variant="info" onClick={this.logout}>Logout</Button>))
               : (<Button variant="info" onClick={this.login}>Login</Button>)}
+            </Nav.Item>
+            <Nav.Item className="mr-15">
+              <Button variant="info" onClick={this.register}>Register</Button>
             </Nav.Item>
           </Nav>
         </Navbar>

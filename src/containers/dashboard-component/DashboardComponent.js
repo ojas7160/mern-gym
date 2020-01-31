@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Axios from '../../axios-instance';
+import DashboardBodyComponent from '../../components/dashboard-body/DashboardBodyComponent';
 
 class DashboardComponent extends Component {
   constructor(props) {
@@ -16,8 +17,7 @@ class DashboardComponent extends Component {
   getAllUsers(){
     Axios.get('/api/user/getAllUsers')
     .then(res => {
-      this.setState({students:res.data.users});
-      console.log(this.state.students);
+      this.setState({students: res.data.users});
     })
     .catch((err) => {
         if (err.response) {
@@ -26,8 +26,6 @@ class DashboardComponent extends Component {
     })
   }
 
-
-
   render() {
     return (
       <div className="fullHeight">
@@ -35,19 +33,13 @@ class DashboardComponent extends Component {
           <div className="col-md-12">
             <div className="main-card mb-3 card" style={{ height: 'auto' }}>
               <div className="card-header">Active Users
-          </div>
-              <div className="table-responsive" style={{ overflow: 'visible', textAlign: 'left' }}>
-                <table className="align-left mb-0 table table-borderless table-striped table-hover">
-                  <thead>
-                    <th>
-                      {this.state.students[0].name}
-                    </th>
-                  </thead>
-                </table>
               </div>
-              <div className="d-block text-center card-footer">
-                <button className="btn-wide btn btn-success"> Export to Excel </button>
-              </div>
+            </div>
+            <div className="table-responsive" style={{ overflow: 'visible', textAlign: 'left' }}>
+              <DashboardBodyComponent students={this.state.students} />
+            </div>
+            <div className="d-block text-center card-footer">
+              <button className="btn-wide btn btn-success"> Export to Excel </button>
             </div>
           </div>
         </div>

@@ -5,9 +5,6 @@ import banner1 from '../../assets/images/banner-1.jpg'
 import banner3 from '../../assets/images/banner-3.jpg'
 
 class appBody extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     return (

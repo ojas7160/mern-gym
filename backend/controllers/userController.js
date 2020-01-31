@@ -34,7 +34,6 @@ exports.userLogin = (req, res, next) => {
 
 
 exports.createUser = (req, res, next) => {
-  console.log("TCL: exports.createUser -> req", req.body)
   bcrypt.hash(req.body.password, 10).then(hashedPassword => {
     const user = new User({
       "name":req.body.name,
@@ -57,6 +56,20 @@ exports.createUser = (req, res, next) => {
       res.status(401).json({
         error: err
       })
+    })
+  })
+}
+
+exports.getAllUsers = (req, res, next) => {
+  User.find({}).
+  then((users) => {
+    res.json({
+      users: users
+    })
+  })
+  .catch(err => {
+    res.json({
+      message: err.response
     })
   })
 }

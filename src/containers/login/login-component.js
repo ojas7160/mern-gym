@@ -3,7 +3,8 @@ import './login-component.css';
 import Axios from '../../axios-instance';
 import toastr from 'toastr';
 import FontAwesome from 'react-fontawesome'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 
 class LoginComponent extends Component {
@@ -47,6 +48,7 @@ class LoginComponent extends Component {
                 toastr.success(res.data.message, 'Success!');
                 localStorage.setItem('loginUser', res.data.user.email);
                 localStorage.setItem('token', res.data.token)
+                this.props.onLogin(localStorage.getItem('token'));
                 this.props.history.push('/dashboard')
             })
             .catch((err) => {
@@ -111,4 +113,22 @@ class LoginComponent extends Component {
         )
     }
 }
-export default withRouter(LoginComponent);
+
+// const mapStateToProps = state => {
+//     return {
+//         ctr: state.counter.counter,
+//         storedResults: state.result.results
+//     };
+// }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogin: (authed) => dispatch({type: 'LOGIN', authed: authed})
+        // onDecrementCounter: () => dispatch({type: 'DECREMENT'}),
+        // onAdditionCounter: () => dispatch({type: 'ADDITION', value: 5, name: 'Ojas'}),
+        // onSubtractionCounter: () => dispatch({type: 'SUBTRACTION', value: 5}),
+        // onStoreResult: (result) => dispatch({type: 'STORE_RESULT', result: result}),
+        // onDeleteResult: (id) => dispatch({type: 'DELETE_RESULT', resultId: id})
+    }
+}
+export default connect(null, mapDispatchToProps)(withRouter(LoginComponent));

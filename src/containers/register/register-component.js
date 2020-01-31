@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './register-component.css';
 import Axios from '../../axios-instance';
 import toastr from 'toastr';
-import FontAwesome from 'react-fontawesome'
 
 class Register extends Component {
     constructor(props) {

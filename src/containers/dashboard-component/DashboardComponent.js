@@ -12,18 +12,19 @@ class DashboardComponent extends Component {
   tableHeader = [];
   tableBody = [];
 
-  renderTableData() {
+  renderTableData = () => {
     this.state.students.map((student) => {
-      this.tableBody.push(
-        <tr key={student.id}>
-          <td>{student.id}</td>
+      return 
+        <tr key={student._id}>
+          <td>{student._id}</td>
           <td>{student.name}</td>
-          <td>{student.age}</td>
-          <td>{student.status == 1 ? <div className="badge badge-success"> Active </div> : <div className="badge badge-warning"> In Active </div>}</td>
+          <td> 21 </td>
+          <td>{student.status === 1 ? <div className="badge badge-success"> Active </div> : <div className="badge badge-warning"> In Active </div>}</td>
           <td>{student.email}</td>
         </tr>
-      )
+      
     })
+    
   }
 
   // renderTableHeader() {
@@ -95,7 +96,7 @@ class DashboardComponent extends Component {
 
                       
                     </tr> */}
-                    {this.tableBody}
+                    {this.renderTableData}
 
                   </tbody>
                 </table>

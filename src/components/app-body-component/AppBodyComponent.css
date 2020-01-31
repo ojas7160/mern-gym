@@ -1,13 +1,43 @@
 .div-style {
   background-color: white;
-  margin: 25px;
-  padding: 12px;
+  margin: 25px 100px;
+  padding: 5px;
   border-radius: 10px;
-  height: 100vh;
+  height: calc(100vh - 125px);
   align-content: center;
-  border: 1px solid black;
 }
 
 .div-style:last-child {
   margin-bottom: 0px;
+}
+
+.carousel,
+.carousel-inner {
+  height: 100%;    
+  border-radius: 10px;
+}
+
+.block-content {
+  padding: 60px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.block-content h3 {
+  color: #a52323;
+  font-size: 100px;
+  text-transform: uppercase;
+}
+
+.block-content h4 {
+  font-size: 50px;
+  margin-bottom: 50px;
+}
+
+.block-content p {
+  font-size: 22px;
 }

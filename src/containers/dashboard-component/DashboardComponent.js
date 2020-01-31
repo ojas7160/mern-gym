@@ -17,7 +17,17 @@ class DashboardComponent extends Component {
   getAllUsers(){
     Axios.get('/api/user/getAllUsers')
     .then(res => {
-      this.setState({students: res.data.users});
+      let students = res.data.users.map(student => {
+        return {
+          name: student.name,
+          membershipNumber: student.membershipNumber,
+          phone: student.phone,
+          address: student.address,
+          email: student.email,
+          id: student._id 
+        }
+      })
+      this.setState({students: students});
     })
     .catch((err) => {
         if (err.response) {

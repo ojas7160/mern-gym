@@ -5,7 +5,8 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
-import './assets/css/toastr.min.css'
+import './assets/css/toastr.min.css';
+import './assets/css/font-awesome.min.css';
 
 const app = (
   <BrowserRouter> 

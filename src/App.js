@@ -4,6 +4,7 @@ import HeaderComponent from './components/header-component/HeaderComponent';
 import Routes from './components/routes/routes';
 
 class App extends Component {
+  
   render() {
     const leftHeader = [
       {link: '/home', name: 'Home' , type:'left'}, 
@@ -11,7 +12,8 @@ class App extends Component {
     ]
 
     const rightHeader = [
-      {link:'/login', name:'Login', type:'right'}
+      {link:'/login', name:'Login', type:'right'},
+      {link:'/register', name:'Register', type:'right'}
     ]
     
     return (

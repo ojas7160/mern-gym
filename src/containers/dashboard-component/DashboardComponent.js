@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
+import Axios from '../../axios-instance';
 
 class DashboardComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      students: [
-        { id: 1, name: 'Wasif', age: 21, status: 1, email: 'wasif@email.com' },
-        { id: 2, name: 'Ali', age: 19, status: 1, email: 'ali@email.com' },
-        { id: 3, name: 'Saad', age: 16, status: 0, email: 'saad@email.com' },
-        { id: 4, name: 'Asad', age: 25, status: 1, email: 'asad@email.com' }
-      ]
+      students: []
     }
   }
 
+  tableHeader = [];
+  tableBody = [];
+
   renderTableData() {
-    return this.state.students.map((student) => {
-      return (
+    this.state.students.map((student) => {
+      this.tableBody.push(
         <tr key={student.id}>
           <td>{student.id}</td>
           <td>{student.name}</td>
@@ -27,10 +26,32 @@ class DashboardComponent extends Component {
     })
   }
 
-  renderTableHeader() {
-    let header = Object.keys(this.state.students[0])
-    return header.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>
+  // renderTableHeader() {
+  //   let header = Object.keys(this.state.students[0])
+  //   return header.map((key, index) => {
+  //     this.tableHeader.push( <th key={index}>{key.toUpperCase()}</th>)
+  //   })
+  // }
+
+  componentDidMount(){
+    this.getAllUsers();
+  }
+
+  getAllUsers(){
+    Axios.get('/api/user/getAllUsers')
+    .then(res => {
+      this.setState({students:res.data.users});
+      // this.renderTableHeader();
+      // this.renderTableData();
+      console.log(this.state.students);
+    })
+    // .then(json => {
+    //   json.map(obj => this.setState({ students: Object.values(obj) }))
+    // })
+    .catch((err) => {
+        if (err.response) {
+
+        }
     })
   }
 
@@ -46,9 +67,9 @@ class DashboardComponent extends Component {
           </div>
               <div className="table-responsive" style={{ overflow: 'visible', textAlign: 'left' }}>
                 <table className="align-left mb-0 table table-borderless table-striped table-hover">
-                  <thead>
-                    <tr>{this.renderTableHeader()}</tr>
-                  </thead>
+                  {/* <thead>
+                    <tr>{this.tableHeader}</tr>
+                  </thead> */}
                   <tbody>
 
                     {/* <tr>
@@ -74,7 +95,7 @@ class DashboardComponent extends Component {
 
                       
                     </tr> */}
-                    {this.renderTableData()}
+                    {this.tableBody}
 
                   </tbody>
                 </table>

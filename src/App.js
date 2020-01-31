@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import './App.css';
 import HeaderComponent from './components/header-component/HeaderComponent';
 import Routes from './components/routes/routes';
-import { withRouter, Redirect } from 'react-router-dom';
-import Axios from './axios-instance';
-import toastr from 'toastr';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 class App extends Component {
 
   state = {isLogout: false, authed: localStorage.getItem('token')}
+
+  componentDidMount() {
+    this.props.checkLogin();
+  }
 
   logout = () => {
     console.log(this.props)
@@ -48,15 +52,15 @@ class App extends Component {
   //   event.preventDefault();
   // }
   render() {
-    const leftHeader = [
-      {link: '/home', name: 'Home' , type:'left', id: 'home'}, 
-      {link: '/dashboard', name: 'Dashboard', type:'left', id: 'dashboard'},
-    ]
+    // const leftHeader = [
+    //   {link: '/home', name: 'Home' , type:'left', id: 'home'}, 
+    //   {link: '/dashboard', name: 'Dashboard', type:'left', id: 'dashboard'},
+    // ]
     
-    const rightHeader = [
-      {link:'/login', name:'Login', type:'right'},
-      {link:'/register', name:'Register', type:'right'}
-    ]
+    // const rightHeader = [
+    //   {link:'/login', name:'Login', type:'right'},
+    //   {link:'/register', name:'Register', type:'right'}
+    // ]
     
     
     return (
@@ -68,4 +72,10 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+const mapDispatchToprops = (dispatch) => {
+  return {
+    checkLogin: () => dispatch({type: 'CHECKLOGIN', authed: localStorage.getItem('token')})
+  }
+}
+
+export default connect(null, mapDispatchToprops)(withRouter(App));

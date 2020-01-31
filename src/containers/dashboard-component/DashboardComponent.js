@@ -20,7 +20,7 @@ class DashboardComponent extends Component {
           <td>{student.id}</td>
           <td>{student.name}</td>
           <td>{student.age}</td>
-          <td>{student.status == 1 ? <div className="badge badge-success"> Active </div> : <div className="badge badge-warning"> In Active </div>}</td>
+          <td>{student.status === 1 ? <div className="badge badge-success"> Active </div> : <div className="badge badge-warning"> In Active </div>}</td>
           <td>{student.email}</td>
         </tr>
       )

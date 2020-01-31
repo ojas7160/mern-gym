@@ -9,7 +9,8 @@ const userSchema = mongoose.Schema({
   active: {type: Boolean, default: true},
   phone: {type: String, unique: true, required: true},
   address: {type: String},
-  payment: {type: Number}
+  payment: {type: Number},
+  email: {type: String}
   // email: {type: String, required: true},
   // password: {type: String, required: true}
 })

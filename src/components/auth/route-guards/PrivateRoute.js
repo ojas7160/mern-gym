@@ -3,7 +3,7 @@ import { Route, Redirect} from 'react-router-dom';
 
 const PrivateRoute = (props) => (
   <div>
-    {true ? (<Route path={props.path} component={props.component} />) : (<Redirect to={{pathname: '/not-found'}} />)}
+    {props.authed ? (<Route path={props.path} component={props.component} />) : (<Redirect to={{pathname: '/login'}} />)}
   </div>
 )
 

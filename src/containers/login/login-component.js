@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import './login-component.css';
 import Axios from '../../axios-instance';
 import toastr from 'toastr';
+import { withRouter } from 'react-router-dom'
 
 
 class LoginComponent extends Component {
     constructor(props) {
         super(props)
-        this.state = { email: '', password: '' , showDetails: false, emailValid:false, userDetail: {email: '', password: ''}, showPassword: false};
+        this.state = { email: '', password: '' , showDetails: false, emailValid:false, userDetail: {email: '', password: ''}, showPassword: false, authed: localStorage.getItem('token')};
 
         this.onchangeEmail = this.onchangeEmail.bind(this);
         this.onchangePassword = this.onchangePassword.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        // this.handleSubmit = this.handleSubmit.bind(this);
+        console.log(this.props)
     }
 
     onchangeEmail(event) {
@@ -31,28 +33,30 @@ class LoginComponent extends Component {
         }
     }
 
-    handleSubmit(event) {
-        this.setState((prevState) => {
-            return {showDetails: true, userDetail: {email: prevState.email, password: prevState.password}}
+    handleSubmit = (event) => {
+        this.setState((prevState, props) => {
+            return {userDetail: {email: prevState.email, password: prevState.password}}
         })
-
         Axios.post('/api/user/login', {email: this.state.email, password: this.state.password})
 		.then((res) => {
-            toastr.success(res.statusText, 'Success!');
+            toastr.success(res.data.message, 'Success!');
             localStorage.setItem('loginUser', res.data.user.email);
             localStorage.setItem('token', res.data.token)
-            this.props.history.push('/dashboard')
+            this.props.history.push('/dashboard');
+            // this.setState({authed: localStorage.getItem('token')});
+            
 		})
 		.catch((err) => {
             if(err.response){
                 toastr.error(err.response.data.message, 'Error');
             }
-		})
+        })
         event.preventDefault();
     }
 
     resetForm = () => {
         this.setState({email:"",password:"", showDetails: false})
+        
     }
     showPassword = () => {
         this.setState(prevState => {return {showPassword: !prevState.showPassword}})
@@ -98,4 +102,4 @@ class LoginComponent extends Component {
         )
     }
 }
-export default LoginComponent;
+export default withRouter(LoginComponent);

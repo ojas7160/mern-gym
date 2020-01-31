@@ -1,41 +1,54 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './HeaderComponent.css'
-import { NavLink, Link } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
+import { NavLink, withRouter } from 'react-router-dom';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 
-const HeaderComponent = (props) => {
-  let leftuls = []
-  let rightuls = []
-  let index = 0;
-  
-  props.leftlist.forEach(li => {
-    leftuls.push(
-      <Nav.Item key={index++} className={"mr-15"}>
-        <NavLink activeClassName="active" className="color-white" to={li.link}>{li.name}</NavLink>
-      </Nav.Item>
-    )
-  })
+class HeaderComponent extends Component {
 
-  props.rightlist.forEach(li => {
-    rightuls.push(
-      <Nav.Item key={index++} className={"mr-15"}>
-        <NavLink activeClassName="active" className="color-white" to={li.link}>{li.name}</NavLink>
-      </Nav.Item>
+  state = {
+    authed: this.props.authed,
+    index: 0
+  }
+  leftuls = []
+  rightuls = []
+  updateIndex = () => {
+    this.setState(prevState => {return {index: prevState.index + 1}})
+  }
+
+  logout = () => {
+    localStorage.clear();
+    this.setState({authed: null});
+    this.props.history.push('/login');
+  }
+
+  login = () => {
+    this.props.history.push('/login')
+  }
+
+  render() {
+    console.log(this.state.authed)
+    return (
+      <div className="header-wrapper">
+        <Navbar bg="dark" variant="dark" sticky="top">
+          <Navbar.Brand href="/">Ojas</Navbar.Brand>
+          <Nav className="mr-auto">
+            <Nav.Item className="mr-15">
+              <NavLink activeClassName="active" className="color-white" to='/home'>Home</NavLink>
+            </Nav.Item>
+            <Nav.Item className="mr-15">
+              <NavLink activeClassName="active" className="color-white" to='/dashboard'>Dashboard</NavLink>
+            </Nav.Item>
+          </Nav>
+          <Nav className="justify-content-end">
+            <Nav.Item className="mr-15">
+              {this.state.authed ? ((<Button variant="info" onClick={this.logout}>Logout</Button>))
+              : (<Button variant="info" onClick={this.login}>Login</Button>)}
+            </Nav.Item>
+          </Nav>
+        </Navbar>
+      </div>
     )
-  })
-  return (    
-    <div className="header-wrapper">
-      <Navbar bg="dark" variant="dark" sticky="top">
-        <Navbar.Brand href="/">Ojas</Navbar.Brand>
-        <Nav className="mr-auto">
-          {leftuls}
-        </Nav>
-        <Nav className="justify-content-end">
-          {rightuls}
-        </Nav>
-      </Navbar>
-    </div>
-  )
+  }
 }
 
-export default HeaderComponent;
+export default withRouter(HeaderComponent);

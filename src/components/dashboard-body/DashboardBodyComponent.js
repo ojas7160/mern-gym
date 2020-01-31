@@ -2,20 +2,12 @@ import React from 'react';
 
 const dashboardBody = (props) => {
   if(props.students) {
-    // var studentsHeader = Object.keys(props.students)
-    // .map((igKey, index) => {
-    //   return (
-    //     <tr key={index}>
-    //       <th style={{textTranform: 'capitalize'}}>{igKey}</th>
-    //     </tr>
-    //   );
-    // });
 
     var studentsbody = props.students
     .map(student => {
       return (
-        <tr key={student._id}>
-          <td style={{textTranform: 'capitalize'}}>{student._id}</td>
+        <tr key={student.id}>
+          <td style={{textTranform: 'capitalize'}}>{student.id}</td>
           <td style={{textTranform: 'capitalize'}}>{student.name}</td>
           <td style={{textTranform: 'capitalize'}}>{student.membershipNumber}</td>
           <td style={{textTranform: 'capitalize'}}>{student.email}</td>

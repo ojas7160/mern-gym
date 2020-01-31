@@ -34,12 +34,12 @@ class DashboardComponent extends Component {
             <div className="main-card mb-3 card" style={{ height: 'auto' }}>
               <div className="card-header">Active Users
               </div>
-            </div>
-            <div className="table-responsive" style={{ overflow: 'visible', textAlign: 'left' }}>
-              <DashboardBodyComponent students={this.state.students} />
-            </div>
-            <div className="d-block text-center card-footer">
-              <button className="btn-wide btn btn-success"> Export to Excel </button>
+              <div className="table-responsive" style={{ overflow: 'visible', textAlign: 'left' }}>
+                <DashboardBodyComponent students={this.state.students} />
+              </div>
+              <div className="d-block text-center card-footer">
+                <button className="btn-wide btn btn-success"> Export to Excel </button>
+              </div>
             </div>
           </div>
         </div>

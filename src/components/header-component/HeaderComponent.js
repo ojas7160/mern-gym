@@ -45,7 +45,7 @@ class HeaderComponent extends Component {
     this.props.history.push('/register');
   }
 
-  render() { 
+  render() {     
     return (
       <div className="header-wrapper">
         <Navbar bg="dark" variant="dark" sticky="top">
@@ -61,10 +61,7 @@ class HeaderComponent extends Component {
           <Nav className="justify-content-end">
             <Nav.Item className="mr-15">
               {this.props.authed ? ((<Button variant="info" onClick={this.logout}>Logout</Button>))
-              : (<Button variant="info" onClick={this.login}>Login</Button>)}
-            </Nav.Item>
-            <Nav.Item className="mr-15">
-              <Button variant="info" onClick={this.register}>Register</Button>
+              : ( <span> <Button variant="info" onClick={this.login}>Login</Button> <Button variant="info" onClick={this.register}>Register</Button> </span>)}
             </Nav.Item>
           </Nav>
         </Navbar>

@@ -8,10 +8,22 @@ import * as serviceWorker from './serviceWorker';
 import './assets/css/toastr.min.css';
 import './assets/css/font-awesome.min.css';
 
+import { createStore, combineReducers } from 'redux';
+import loginReducer from './store/reducers/login-reducer';
+import { Provider } from 'react-redux';
+
+const rootReducer = combineReducers({
+  loginReducer: loginReducer
+});
+
+const store = createStore(rootReducer);
+
 const app = (
-  <BrowserRouter> 
-    <App />
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter> 
+      <App />
+    </BrowserRouter>
+  </Provider>
 );
 
 ReactDOM.render(app, document.getElementById('root'));

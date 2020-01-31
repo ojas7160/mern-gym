@@ -3,15 +3,18 @@ import './login-component.css';
 import Axios from '../../axios-instance';
 import toastr from 'toastr';
 import FontAwesome from 'react-fontawesome'
+import { withRouter } from 'react-router-dom'
+
 
 class LoginComponent extends Component {
     constructor(props) {
         super(props)
-        this.state = { email: '', password: '', showDetails: false, emailValid: true, passwordValid: true, userDetail: { email: '', password: '' }, showPassword: false };
+        this.state = { email: '', password: '' , showDetails: false, emailValid:true, passwordValid: true, userDetail: {email: '', password: ''}, showPassword: false, authed: localStorage.getItem('token')};
 
         this.onchangeEmail = this.onchangeEmail.bind(this);
         this.onchangePassword = this.onchangePassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        console.log(this.props)
     }
 
     onchangeEmail(event) {
@@ -69,7 +72,7 @@ class LoginComponent extends Component {
                         <div className="card"></div>
                         <div className="card">
                             <h1 className="title">Login</h1>
-                            <form onSubmit={this.handleSubmit} autoComplete="new-password">
+                            <form onSubmit={this.handleSubmit}>
                                 <div className="input-container">
                                     <input type="email" name="email" value={this.state.email} onChange={this.onchangeEmail} required />
                                     <label>Email</label>
@@ -108,4 +111,4 @@ class LoginComponent extends Component {
         )
     }
 }
-export default LoginComponent;
+export default withRouter(LoginComponent);

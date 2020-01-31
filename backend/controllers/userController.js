@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 exports.userLogin = (req, res, next) => {
   let fetchedUser;
-  User.findOne({membershipNumber: req.body.membershipNumber}).
+  User.findOne({email: req.body.email}).
   then((user) => {
     if(!user) {
       return res.status(401).json({
@@ -23,8 +23,8 @@ exports.userLogin = (req, res, next) => {
     }
 
     const token = jwt.sign({membershipNumber: req.body.membershipNumber, _id: fetchedUser._id}, "secretLongEnough", {expiresIn: '1h'})
-    return res.status(201).json({
-      message: "Success",
+    return res.json({
+      message: "Login Successfully",
       user: fetchedUser,
       token: token,
       expiresIn: 3600
@@ -34,16 +34,23 @@ exports.userLogin = (req, res, next) => {
 
 
 exports.createUser = (req, res, next) => {
+  console.log("TCL: exports.createUser -> req", req.body)
   bcrypt.hash(req.body.password, 10).then(hashedPassword => {
     const user = new User({
-      email: req.body.email,
-      password: hashedPassword
+      "name":req.body.name,
+      "membershipNumber":req.body.membershipNumber,
+      "email":req.body.email,
+      "password":hashedPassword,
+      "admissionType":req.body.admissionType,
+      "feesSubmissionDate": new Date(req.body.feesSubmissionDate),
+      "phone":req.body.phone,
+      "address":req.body.address
     })
 
     user.save()
     .then(newUser => {
       res.status(201).json({
-        message: 'Saved',
+        message: 'Register successfully',
         user: newUser
       })
     }).catch(err => {

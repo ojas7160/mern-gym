@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import Axios from '../../axios-instance';
+// import { JsonToExcel } from 'react-json-excel';
 import DashboardBodyComponent from '../../components/dashboard-body/DashboardBodyComponent';
+import ExportToExcel from '../../components/export-to-excel/exportToExcelComponent';
+// import * as CanvasJSReact from '../../assets/canvas/canvasjs.react';
+//var CanvasJSReact = require('./canvasjs.react');
+// var CanvasJS = CanvasJSReact.CanvasJS;
+// var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class DashboardComponent extends Component {
   constructor(props) {
@@ -36,6 +42,10 @@ class DashboardComponent extends Component {
     })
   }
 
+  exportToExcel = () => {
+    
+  }
+
   render() {
     return (
       <div className="fullHeight">
@@ -48,7 +58,8 @@ class DashboardComponent extends Component {
                 <DashboardBodyComponent students={this.state.students} />
               </div>
               <div className="d-block text-center card-footer">
-                <button className="btn-wide btn btn-success"> Export to Excel </button>
+                {/* <button className="btn-wide btn btn-success" onClick={this.exportToExcel}> Export to Excel </button> */}
+                <ExportToExcel />
               </div>
             </div>
           </div>

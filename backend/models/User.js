@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
   name: {type: String, required: true},
-  membershipNumber: {type: String, required: true, unique: true},
+  membershipNumber: {type: Number, required: true},
   password: {type: String, required: true},
   admissionType: {type: String}, // annual, quarterly, monthly
   feesSubmissionDate: {type: Date},

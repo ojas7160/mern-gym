@@ -7,6 +7,7 @@ import ExportToExcel from '../../components/export-to-excel/exportToExcelCompone
 //var CanvasJSReact = require('./canvasjs.react');
 // var CanvasJS = CanvasJSReact.CanvasJS;
 // var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+import { withRouter, Redirect } from 'react-router-dom';
 
 class DashboardComponent extends Component {
   constructor(props) {
@@ -30,7 +31,8 @@ class DashboardComponent extends Component {
           phone: student.phone,
           address: student.address,
           email: student.email,
-          id: student._id 
+          id: student._id,
+          active: student.active
         }
       })
       this.setState({students: students});
@@ -46,6 +48,12 @@ class DashboardComponent extends Component {
     
   }
 
+  openUser = (id) => {
+    // console.log(id)
+    this.props.history.push('/users/'+id);
+    // return (<Redirect to={{pathname: '/users', state: {id: id, edit: true}}} />)
+  }
+
   render() {
     return (
       <div className="fullHeight">
@@ -55,7 +63,7 @@ class DashboardComponent extends Component {
               <div className="card-header">Active Users
               </div>
               <div className="table-responsive" style={{ overflow: 'visible', textAlign: 'left' }}>
-                <DashboardBodyComponent students={this.state.students} />
+                <DashboardBodyComponent students={this.state.students} openUser={(id) => this.openUser(id)} />
               </div>
               <div className="d-block text-center card-footer">
                 {/* <button className="btn-wide btn btn-success" onClick={this.exportToExcel}> Export to Excel </button> */}
@@ -69,4 +77,4 @@ class DashboardComponent extends Component {
   }
 }
 
-export default DashboardComponent;
+export default withRouter(DashboardComponent);

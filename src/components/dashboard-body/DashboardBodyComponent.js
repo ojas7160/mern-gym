@@ -1,4 +1,5 @@
 import React from 'react';
+import './DashboardBodyComponent.css';
 
 const dashboardBody = (props) => {
   if(props.students) {
@@ -6,13 +7,13 @@ const dashboardBody = (props) => {
     var studentsbody = props.students
     .map(student => {
       return (
-        <tr key={student.id}>
+        <tr onClick={(id) => props.openUser(student.id)} key={student.id} className="cursor-pointer">
           <td style={{textTranform: 'capitalize'}}>{student.membershipNumber}</td>
           <td style={{textTranform: 'capitalize'}}>{student.name}</td>
           <td style={{textTranform: 'capitalize'}}>{student.email}</td>
           <td style={{textTranform: 'capitalize'}}>{student.phone}</td>
           <td style={{textTranform: 'capitalize'}}>{student.address}</td>
-          <td style={{textTranform: 'capitalize'}}>{student.active ? <div className="badge badge-success"> Active </div> : <div className="badge badge-warning">Pending</div>}</td>
+          <td style={{textTranform: 'capitalize'}}>{student.active ? (<div className="badge badge-success"> Active </div>) : (<div className="badge badge-warning">Pending</div>)}</td>
         </tr>
       );
     });

@@ -14,10 +14,8 @@ class App extends Component {
   }
 
   logout = () => {
-    console.log(this.props)
     localStorage.clear();
     this.setState({isLogout: true, authed: null})
-    console.log(this.state.authed)
     this.props.history.push('/login');
   }
 

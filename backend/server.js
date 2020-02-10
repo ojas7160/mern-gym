@@ -9,7 +9,7 @@ const connectionString = 'mongodb+srv://ojas7160:ojas7160@cluster0-02ba1.mongodb
 
 app.use(bodyParser.json()); // parse request body
 app.use(bodyParser.urlencoded({extended: true}));
-
+app.use("/images", express.static(path.join("backend/images")));
 mongoose.connect(connectionString).
 then(() => {
   console.log('DB connected')

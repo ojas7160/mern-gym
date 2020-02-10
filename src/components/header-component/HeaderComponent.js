@@ -14,16 +14,12 @@ class HeaderComponent extends Component {
   rightuls = []
 
   UNSAFE_componentDidMount() {
-    console.log('redux did mount', this.props.authed)
   }
 
   UNSAFE_componentWillMount() {
-    console.log('redux will mount', this.props.authed)
   }
 
   // componentWillUpdate(newState, prevState) {
-  //   console.log(newState, prevState);
-  //   console.log(this.props.authed)
   //   if(newState.authed !== prevState.authed) {
   //     this.setState({authed: this.props.authed});
   //   }
@@ -42,7 +38,7 @@ class HeaderComponent extends Component {
   }
 
   register = () => {
-    this.props.history.push('/register');
+    this.props.history.push('/users');
   }
 
   render() {     
@@ -71,7 +67,6 @@ class HeaderComponent extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('state', state)
   return {
     authed: state.loginReducer.token
   }

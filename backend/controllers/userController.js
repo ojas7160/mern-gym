@@ -2,11 +2,13 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const shortId = require('shortid');
+const mongoose = require('mongoose');
 
 exports.userLogin = (req, res, next) => {
   let fetchedUser;
   User.findOne({email: req.body.email}).
   then((user) => {
+    console.log(user)
     if(!user) {
       return res.status(401).json({
         message: "Invalid Credentials"
@@ -17,6 +19,7 @@ exports.userLogin = (req, res, next) => {
     return bcrypt.compare(req.body.password, user.password);
   }).
   then((result) => {
+    console.log(result)
     if(!result) {
       return res.status(401).json({
         message: "Invalid Credentials"
@@ -35,42 +38,63 @@ exports.userLogin = (req, res, next) => {
 
 
 exports.createUser = (req, res, next) => {
-  User.find({}).sort({_id: -1}).limit(1).then(lastUser => {
-  console.log("TCL: exports.createUser -> lastUser", lastUser)
-  console.log(lastUser[0].membershipNumber)
-    bcrypt.hash(req.body.password, 10).then(hashedPassword => {
-      const user = new User({
-        "name":req.body.name,
-        "membershipNumber": lastUser ? lastUser[0].membershipNumber + 1 : 1,
-        "email":req.body.email,
-        "password":hashedPassword,
-        "admissionType":req.body.admissionType,
-        "feesSubmissionDate": new Date(req.body.feesSubmissionDate),
-        "phone":req.body.phone,
-        "address":req.body.address
-      })
-  
-      user.save()
-      .then(newUser => {
-        res.status(201).json({
-          message: 'Register successfully',
-          user: newUser
-        })
-      }).catch(err => {
-        res.status(401).json({
-          error: err
+  let session = null;
+  let dueDate;
+  var d = new Date(req.body.feesSubmissionDate);
+  if(req.body.admissionType === 'quarterly') {
+    dueDate = d.setMonth((d.getMonth() + 3))
+  } else if(req.body.admissionType === 'annually') {
+    dueDate = d.setMonth((d.getMonth() + 12))
+  } else if(req.body.admissionType === 'monthly') {
+    dueDate = d.setMonth((d.getMonth() + 1))
+  }
+  console.log(req)
+  mongoose.startSession()
+  .then(_session => {
+    session = _session;
+    session.startTransaction();
+    const url = req.protocol + '://' + req.get('host');
+    User.find({}).sort({_id: -1}).limit(1).then(lastUser => {    
+      bcrypt.hash(req.body.password, 10).then(hashedPassword => {
+        let userReqBody = {
+          "name":req.body.name,
+          'userId': req.body.userId,
+          "membershipNumber": (lastUser && lastUser.length) ? (lastUser[0].membershipNumber + 1) : 1000,
+          "email":req.body.email,
+          "password":hashedPassword,
+          "admissionType":req.body.admissionType,
+          "feesSubmissionDate": new Date(req.body.feesSubmissionDate),
+          "phone":req.body.phone,
+          "address":req.body.address,
+          "dueDate": new Date(dueDate)
+        }
+        if(req.file) {
+          userReqBody['imagePath'] = url + '/images/' + req.file.filename
+        }
+        else {
+          userReqBody['imagePath'] = req.body.imagePath
+        }
+        const user = new User(userReqBody)
+    
+        user.save()
+        .then(newUser => {
+          session.commitTransaction();
+          res.status(201).json({
+            message: 'Register successfully',
+            user: newUser
+          })
+        }).catch(err => {
+          session.abortTransaction();
+          res.status(401).json({
+            error: err
+          })
         })
       })
     })
-  })
-  // User.find({}).then(users => {
-  //   allusers = users
-  //   console.log("TCL: exports.createUser -> allusers", JSON.parse(allusers).sort({_id: -1}))
-  //   // lastUser = JSON.parse(allusers).sort({_id: -1}).limit(1);
-  //   // console.log("TCL: exports.createUser -> lastUser", lastUser)
-  // })
-
-  
+    .catch(err => {
+      session.abortTransaction();
+    })
+  })  
 }
 
 exports.getAllUsers = (req, res, next) => {
@@ -83,6 +107,39 @@ exports.getAllUsers = (req, res, next) => {
   .catch(err => {
     res.json({
       message: err.response
+    })
+  })
+}
+
+exports.getUser = (req, res, next) => {
+  User.find({_id: req.params.id})
+  .then(user => {
+    res.json({
+      message: 'Success',
+      user: user
+    })
+  })
+  .catch(err => {
+    res.json({message: 'Error', error: err})
+  })
+}
+
+exports.updateUser = (req, res, next) => {
+  const {password, ...rest} = req.body;
+  const dataToUpdate = rest
+  const url = req.protocol + '://' + req.get('host');
+  dataToUpdate['imagePath'] = url + '/images/' + req.file.filename
+  User.update({_id: req.params.id}, dataToUpdate)
+  .then(user => {
+    res.json({
+      message: 'success',
+      user: user
+    })
+  })
+  .catch(err => {
+    res.json({
+      message: 'error',
+      error: err
     })
   })
 }

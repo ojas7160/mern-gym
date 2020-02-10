@@ -5,7 +5,6 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-  console.log("TCL: reducer -> action", action)
   switch(action.type) {
     case actionTypes.LOGIN:
       return {

@@ -28,7 +28,7 @@ const onError = (err) => {
   throw err;
 }
 
-const port = normalizePort(process.env.PORT) || 3001;
+const port = normalizePort(process.env.PORT) || 8081;
 console.log(port)
 server.set("port", port)
 

@@ -3,7 +3,7 @@ import "./register-component.css";
 import Axios from "../../axios-instance";
 import toastr from "toastr";
 import { withRouter } from 'react-router-dom';
-import axiosInterceptor from '../../axios-interceptor';
+import * as userService from '../../services/users-service/userService';
 
 class Register extends Component {
   constructor(props) {
@@ -42,7 +42,7 @@ class Register extends Component {
       this.setState({edit: true, userId: this.props.match.params.id});
       // debugger;
       console.log(this.state)
-      Axios.get('api/user/getUser/'+ this.props.match.params.id)
+      userService.default.getUser(this.props.match.params.id)
       .then(response => {
         console.log(response)
         this.setState(prevState => {return {...this.state, user: response.data.user[0]} })

@@ -7,7 +7,8 @@ import ExportToExcel from '../../components/export-to-excel/exportToExcelCompone
 //var CanvasJSReact = require('./canvasjs.react');
 // var CanvasJS = CanvasJSReact.CanvasJS;
 // var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import * as userService from '../../services/users-service/userService';
 
 class DashboardComponent extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class DashboardComponent extends Component {
   }
 
   getAllUsers(){
-    Axios.get('/api/user/getAllUsers')
+    userService.default.getAllUsers()
     .then(res => {
       let students = res.data.users.map(student => {
         return {
@@ -36,11 +37,8 @@ class DashboardComponent extends Component {
         }
       })
       this.setState({students: students});
-    })
-    .catch((err) => {
-        if (err.response) {
+    }, err => {
 
-        }
     })
   }
 

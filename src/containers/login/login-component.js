@@ -46,7 +46,7 @@ class LoginComponent extends Component {
         Axios.post('/api/user/login', { email: this.state.email, password: this.state.password })
             .then((res) => {
                 toastr.success(res.data.message, 'Success!');
-                localStorage.setItem('loginUser', res.data.user.email);
+                localStorage.setItem('loginUser', JSON.stringify(res.data.user));
                 localStorage.setItem('token', res.data.token)
                 this.props.onLogin(localStorage.getItem('token'));
                 this.props.history.push('/dashboard')

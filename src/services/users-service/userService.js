@@ -22,4 +22,8 @@ const getUser = (id) => {
   return Axios.get(BaseURI + 'getUser/' + id);
 }
 
-export default { getItem, getToken, setItem, getAllUsers, getUser };
+const updateProfile = (id, data) => {
+  return Axios.put(BaseURI + 'updateUser/' + id, data);
+}
+
+export default { getItem, getToken, setItem, getAllUsers, getUser, updateProfile };

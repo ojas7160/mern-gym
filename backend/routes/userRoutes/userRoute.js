@@ -9,6 +9,7 @@ router.post('/signup', uploadImg, userController.createUser);
 router.get('/getAllUsers', userController.getAllUsers);
 router.get('/getUser/:id', userController.getUser);
 router.put('/updateUser/:id', authGuard, uploadImg, userController.updateUser);
+router.put('/updatePic/:id', authGuard, uploadImg, userController.updateProfilePicture);
 
 
 module.exports = router;

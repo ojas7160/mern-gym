@@ -48,7 +48,6 @@ exports.createUser = (req, res, next) => {
   } else if(req.body.admissionType === 'monthly') {
     dueDate = d.setMonth((d.getMonth() + 1))
   }
-  console.log(req)
   mongoose.startSession()
   .then(_session => {
     session = _session;
@@ -128,7 +127,13 @@ exports.updateUser = (req, res, next) => {
   const {password, ...rest} = req.body;
   const dataToUpdate = rest
   const url = req.protocol + '://' + req.get('host');
-  dataToUpdate['imagePath'] = url + '/images/' + req.file.filename
+
+  if(req.file) {
+    dataToUpdate['imagePath'] = url + '/images/' + req.file.filename
+  }
+  else {
+    dataToUpdate['imagePath'] = req.body.imagePath
+  }
   User.update({_id: req.params.id}, dataToUpdate)
   .then(user => {
     res.json({
@@ -140,6 +145,37 @@ exports.updateUser = (req, res, next) => {
     res.json({
       message: 'error',
       error: err
+    })
+  })
+}
+
+exports.updateProfilePicture = (req, res, next) => {
+  var reqBody = req.body;
+  const url = req.protocol + '://' + req.get('host');
+
+  if(req.file) {
+    reqBody['imagePath'] = url + '/images/' + req.file.filename
+  }
+  else {
+    reqBody['imagePath'] = req.body.imagePath
+  }
+  // User.find({_id: req.params.id})
+  // .then(response => {
+  //   if(response.imagePath && response.imagePath.length) {
+
+  //   }
+  // })
+  User.update({_id: res.params.id}, reqBody)
+  .then(response => {
+    res.json({
+      message: 'Success',
+      result: true
+    })
+  })
+  .catch(err => {
+    res.json({
+      message: err,
+      result: false
     })
   })
 }

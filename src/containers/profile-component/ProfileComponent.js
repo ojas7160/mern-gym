@@ -1,16 +1,19 @@
 import React, { Component } from "react";
 import "./ProfileComponent.css";
 import * as userService from "../../services/users-service/userService";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Form, Container, Spinner } from "react-bootstrap";
 import moment from 'moment';
+import FontAwesome from 'react-fontawesome';
 import Datepicker from '../../components/Date-picker/DatePickerComponent';
+import EditFormComponent from '../../components/edit-form-component/EditFormComponent';
 // import * as userService  from '../../services/users-service/userService';
 
 class profile extends Component {
   profile = {};
   state = {
     user: {},
-    edit: false
+    edit: false,
+    showModal: false
   };
   form = new FormData();
   componentWillMount() {}
@@ -18,7 +21,7 @@ class profile extends Component {
   componentDidMount() {
     this.profile = JSON.parse(userService.default.getItem("loginUser"));
     this.setState({ user: this.profile });
-    this.setState({user: {...this.profile, feesSubmissionDate:  moment(new Date(this.profile.feesSubmissionDate)).format("DD-MMM-YYYY"), displayFeesDate: new Date(this.profile.feesSubmissionDate)}})
+    this.setState({user: {...this.profile, feesSubmissionDate:  moment(new Date(this.profile.feesSubmissionDate)).format("DD-MMM-YYYY"), dueDate: moment(new Date(this.profile.dueDate)).format("DD-MMM-YYYY"), displayFeesDate: new Date(this.profile.feesSubmissionDate)}})
   }
 
   changeEdit = () => {
@@ -41,21 +44,25 @@ class profile extends Component {
     })
   }
 
-  changeMno = (event) => {
-    this.setState({user: {...this.state.user, membershipNumber: event.target.value}})
+  changeInput = (type, event) => {
+    this.setState({user: {...this.state.user, [type]: event.target.value}})
   }
 
-  changePhone = (event) => {
-    this.setState({user: {...this.state.user, phone: event.target.value}})
-  }
+  // changeMno = (event) => {
+  //   this.setState({user: {...this.state.user, membershipNumber: event.target.value}})
+  // }
 
-  changeAddress = (event) => {
-    this.setState({user: {...this.state.user, address: event.target.value}})
-  }
+  // changePhone = (event) => {
+  //   this.setState({user: {...this.state.user, phone: event.target.value}})
+  // }
 
-  changeName = (event) => {
-    this.setState({user: {...this.state.user, name: event.target.value}})
-  }
+  // changeAddress = (event) => {
+  //   this.setState({user: {...this.state.user, address: event.target.value}})
+  // }
+
+  // changeName = (event) => {
+  //   this.setState({user: {...this.state.user, name: event.target.value}})
+  // }
 
   changeImage = (event) => {
     let images = event.target.files ? Array.from(event.target.files) : []
@@ -80,142 +87,129 @@ class profile extends Component {
     this.setState({edit: false})
   }
 
+  toggleModal = (show) => {
+    this.setState({showModal: show})
+  }
+
   render() {
     return (
       <div className="bg-white full-height">
         <div className="padding-10">
-          <Button variant="primary" onClick={this.state.edit ? this.save : this.changeEdit}>{this.state.edit ? 'Save' : 'Edit'}</Button>
-          <Button variant="danger" onClick={this.cancel}>cancel</Button>
-          {!this.state.edit ? (
-            <Row>
-              <Col md={4}>
-                <div>
-                  <img
-                    src={this.state.user.imagePath}
-                    alt="profile pic"
-                    height="80"
-                    width="80"
-                    className="border-radius-50"
-                  />
-                  <h3>{this.state.user.name}</h3>
-                </div>
-              </Col>
-              <Col md={8}>
-                <Row>
-                  <Col md={4}>
-                    <label>MemberShip Number: </label>
-                    <span>{this.state.user.membershipNumber}</span>
-                  </Col>
-                  <Col md={4}>
-                    <label>Status: </label>
-                    <span> {this.state.user.active ? 'Active' : 'Pending'}</span>
-                  </Col>
-                </Row>
+          <h1 className="text-center">My Profile</h1>
+          <FontAwesome
+            onClick={this.state.edit ? this.cancel : this.changeEdit}
+            name={this.state.edit ? "times" : "edit"}
+            style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)', float: 'right',
+            marginLeft: '10px',
+            fontSize: '20px' }} />
+          {/* {!this.state.edit ? ( */}
+            <Container>
+              <Row className="form-design p-0">
+                <Col md={4}>
+                  <div>
+                    <img
+                      src={this.state.user.imagePath}
+                      alt="profile pic"
+                      style={{width: '100%'}}
+                    />
+                  </div>
+                </Col>
+                <Col md={8}>
+                  {!this.state.edit ? (<h2 className="text-left">{this.state.user.name}</h2>) : 
+                  (<Form.Control value={this.state.user.name} onChange={($event) => this.changeInput('name', $event)} type="text" placeholder="Name" />)}
+                  <Form>
+                    <Form.Group as={Row} controlId="formPlaintextEmail">
+                      <Form.Label column sm="4">
+                        Email:
+                      </Form.Label>
+                      <Col sm="8">
+                        {!this.state.edit ? (<Form.Control plaintext readOnly defaultValue={this.state.user.email} />) : 
+                        (<Form.Control value={this.state.user.email} onChange={($event) => this.changeInput('email', $event)} type="email" placeholder="Enter email" />)}
+                      </Col>
+                    </Form.Group>
 
-                <Row>
-                  <Col md={4}>
-                    <label>Address: </label>
-                    <span> {this.state.user.address}</span>
-                  </Col>
-                  <Col md={4}>
-                    <label>Phone: </label>
-                    <span> {this.state.user.phone}</span>
-                  </Col>
-                </Row>
+                    <Form.Group as={Row} controlId="formPlaintextPassword">
+                      <Form.Label column sm="4">
+                        Phone:
+                      </Form.Label>
+                      <Col sm="8">
+                        {!this.state.edit ? <Form.Control plaintext readOnly defaultValue={this.state.user.phone} /> :
+                        <Form.Control value={this.state.user.phone} onChange={($event) => this.changeInput('phone', $event)} placeholder="999888.." />}
+                      </Col>
+                    </Form.Group>
 
-                <Row>
-                  <Col md={4}>
-                    <label>Email: </label>
-                    <span> {this.state.user.email}</span>
-                  </Col>
-                  <Col md={4}>
-                    {/* <label>Phone: </label>
-                    <span>{this.state.user.phone}</span> */}
-                  </Col>
-                </Row>
+                    <Form.Group as={Row} controlId="formPlaintextPassword">
+                      <Form.Label column sm="4">
+                        Status:
+                      </Form.Label>
+                      <Col sm="8">
+                      <Form.Control plaintext readOnly defaultValue={this.state.user.active ? 'Active' : 'Pending'} />
+                      </Col>
+                    </Form.Group>
 
-                <Row>
-                  <Col md={4}>
-                    <label>Fees Submission: </label>
-                    <span> {this.state.user.feesSubmissionDate}</span>
-                  </Col>
-                  <Col md={4}>
-                    <label>Due Date: </label>
-                    <span> {this.state.user.dueDate}</span>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            ) : (
-            <Row>
-              <Col md={4}>
-                <div>
-                  <input type="file" value={[]} onChange={this.changeImage} />
-                  <input type="text" value={this.state.user.name} onChange={this.changeName} />
-                </div>
-              </Col>
-              <Col md={8}>
-                <Row>
-                  <Col md={4}>
-                    <label>MemberShip Number: </label>
-                    <input type="text" value={this.state.user.membershipNumber} onChange={this.changeMno}/>
-                  </Col>
-                  <Col md={4}>
-                    <label>Status: </label>
-                    <span> {this.state.user.active ? 'Active' : 'Pending'}</span>
-                  </Col>
-                </Row>
+                    <Form.Group as={Row} controlId="formPlaintextPassword">
+                      <Form.Label column sm="4">
+                        Gender:
+                      </Form.Label>
+                      <Col sm="8">
+                        {!this.state.edit ? <Form.Control plaintext readOnly defaultValue={this.state.user.gender || 'Male'} /> :
+                        (<Form.Control as="select" value={this.state.user.gender} onChange={($event) => this.changeInput('gender', $event)}>
+                          <option value="select">Select</option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                        </Form.Control>)}
+                      </Col>
+                    </Form.Group>
 
-                <Row>
-                  <Col md={4}>
-                    <label>Address: </label>
-                    <input
-                    type="text"
-                    name="address"
-                    value={this.state.user.address}
-                    onChange={this.changeAddress}
+                    <Form.Group as={Row} controlId="formPlaintextPassword">
+                      <Form.Label column sm="4">
+                        Membership Number:
+                      </Form.Label>
+                      <Col sm="8">
+                      <Form.Control plaintext readOnly defaultValue={this.state.user.membershipNumber} />
+                      </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} controlId="formPlaintextPassword">
+                      <Form.Label column sm="4">
+                        Address:
+                      </Form.Label>
+                      <Col sm="8">
+                        {!this.state.edit ? <Form.Control plaintext readOnly defaultValue={this.state.user.address} /> : 
+                        <Form.Control value={this.state.user.address} onChange={($event) => this.changeInput('address', $event)} placeholder="1234 Main St" />}
+                      </Col>
+                    </Form.Group>
+
                     
-                  />
-                  </Col>
-                  <Col md={4}>
-                    <label>Phone: </label>
-                    <input
-                    type="tel"
-                    name="phone"
-                    value={this.state.user.phone}
-                    onChange={this.changePhone}
-                    
-                  />
-                  </Col>
-                </Row>
 
-                <Row>
-                  <Col md={4}>
-                    <label>Email: </label>
-                    <span> {this.state.user.email}</span>
-                  </Col>
-                  <Col md={4}>
-                    {/* <label>Phone: </label>
-                    <span>{this.state.user.phone}</span> */}
-                  </Col>
-                </Row>
+                    <Form.Group as={Row} controlId="formPlaintextPassword">
+                      <Form.Label column sm="4">
+                        Fees Submission Date:
+                      </Form.Label>
+                      <Col sm="8">
+                      <Form.Control plaintext readOnly defaultValue={this.state.user.feesSubmissionDate} />
+                      </Col>
+                    </Form.Group>
 
-                <Row>
-                  <Col md={4}>
-                    <label>Fees Submission: </label>
-                    {/* {this.state.user.displayFeesDate} */}
-                    {/* <DatePicker selected={this.state.user.displayFeesDate} onChange={date => this.setStartDate(date)} /> */}
-                    <Datepicker getDate={this.state.user.displayFeesDate} setDate={(date) => this.setStartDate(date)}/>
-                  </Col>
-                  <Col md={4}>
-                    <label>Due Date: </label>
-                    <span> {this.state.user.dueDate}</span>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            )}
-            
+                    <Form.Group as={Row} controlId="formPlaintextPassword">
+                      <Form.Label column sm="4">
+                        Fees Due Date:
+                      </Form.Label>
+                      <Col sm="8">
+                      <Form.Control plaintext readOnly defaultValue={this.state.user.dueDate} />
+                      </Col>
+                    </Form.Group>
+                  </Form>
+                  {this.state.edit ? 
+                  <Button variant="primary" onClick={this.save}>Save</Button> : null}
+                </Col>
+                
+              </Row>
+              
+            </Container>
+            {/* // ) : ( */}
+
+            {/* <EditFormComponent setLgShow={(show) => this.toggleModal(show)} lgShow={this.state.showModal} user={this.state.user} changeInput={this.changeInput}/>          */}
         </div>
       </div>
     );

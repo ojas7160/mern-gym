@@ -1,0 +1,28 @@
+.float-left {
+  float: left;
+}
+
+.edit-form {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+  padding: 50px;
+  border-radius: 5px;
+  /* display: flex; */
+  width: 88%;
+  display: inline-block;
+  margin-top: 5%;
+}
+
+.shadow {
+  margin-top: 5%;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+  
+}
+
+.margin-rl {
+  margin-right: 25px;
+  margin-left: 40px;
+}
+
+.full-width {
+  width: 100%;
+}

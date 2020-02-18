@@ -8,6 +8,7 @@ import LoginComponent from '../../containers/login/login-component'
 import RegisterComponent from '../../containers/register/register-component';
 // import UserComponent from '../user-component/UserComponent';
 import ProfileComponent from '../../containers/profile-component/ProfileComponent';
+import ChangePasswordComponent from '../../containers/change-password/changePasswordComponent';
 
 const routes = (props) => {
   const authed = localStorage.getItem('token');
@@ -19,6 +20,7 @@ const routes = (props) => {
         <Route path="/users" exact component={RegisterComponent}/>
         <Route path="/profile" exact component={ProfileComponent}/>
         <Route path="/users/:id" component={RegisterComponent}/>
+        <Route path="/changePassword" component={ChangePasswordComponent}/>
         <Route path="/login" component={() => <LoginComponent login={props.logout} handleSubmit={props.handleSubmit}/>} />
         <Route path="/not-found" component={NotFoundComponent} />
         <Route path = "/" exact component = {HomeComponent} />

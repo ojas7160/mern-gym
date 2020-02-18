@@ -179,3 +179,46 @@ exports.updateProfilePicture = (req, res, next) => {
     })
   })
 }
+
+exports.changeUserPassword = (req, res, next) => {
+  let fetchedUser;
+  User.find({_id: req.body.id})
+  .then(user => {
+    if(!user) {
+      return res.status(401).json({
+        message: 'User not found for the id.'
+      })
+    }
+
+    fetchedUser = user;
+  }).
+  then(result => {
+    if(!result) {
+      return res.status(401).json({
+        message: 'User not found for the id.'
+      })
+    }
+
+    bcrypt.compare(req.body.oldPassword, fetchedUser.password).then((password) => {
+      if(!password) {
+        return res.status(401).json({
+          message: 'Password Mismatch'
+        })
+      }
+      
+      bcrypt.hash(req.body.newPassword, 10).then(hashedPassword => {
+        User.update({_id: req.body.id}, {password: hashedPassword})
+        .then(updatedUser => {
+          return res.json({
+            status: 'Success'
+          })
+        }, err => {
+          return res.json({message: err})
+        })
+        .catch(err => {
+          return res.json({message: err})
+        })
+      })
+    })
+  })
+}

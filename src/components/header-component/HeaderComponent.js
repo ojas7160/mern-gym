@@ -3,6 +3,7 @@ import './HeaderComponent.css'
 import { NavLink, withRouter } from 'react-router-dom';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import * as userService from '../../services/users-service/userService';
 
 class HeaderComponent extends Component {
 
@@ -41,6 +42,13 @@ class HeaderComponent extends Component {
     this.props.history.push('/users');
   }
 
+  changePassword = () => {
+    userService.default.changePassword
+    .then(response => {
+
+    })
+  }
+
   render() {     
     return (
       <div className="header-wrapper">
@@ -55,6 +63,11 @@ class HeaderComponent extends Component {
             </Nav.Item>
           </Nav>
           <Nav className="justify-content-end">
+            <Nav.Item className="mr-15">
+            {this.props.authed ? (
+              <NavLink activeClassName="active" className="color-white" to='/changePassword'>Change Password</NavLink>
+            ) : null}
+            </Nav.Item>
             <Nav.Item className="mr-15">
               {this.props.authed ? ((<Button variant="info" onClick={this.logout}>Logout</Button>))
               : ( <span> <Button variant="info" onClick={this.login}>Login</Button> <Button variant="info" onClick={this.register}>Register</Button> </span>)}

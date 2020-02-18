@@ -10,6 +10,7 @@ router.get('/getAllUsers', userController.getAllUsers);
 router.get('/getUser/:id', userController.getUser);
 router.put('/updateUser/:id', authGuard, uploadImg, userController.updateUser);
 router.put('/updatePic/:id', authGuard, uploadImg, userController.updateProfilePicture);
+router.post('/changeUserPassword', authGuard, userController.changeUserPassword);
 
 
 module.exports = router;

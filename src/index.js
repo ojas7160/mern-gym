@@ -7,16 +7,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 import './assets/css/toastr.min.css';
 import './assets/css/font-awesome.min.css';
-
-import { createStore, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import loginReducer from './store/reducers/login-reducer';
 import { Provider } from 'react-redux';
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
   loginReducer: loginReducer
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, composeEnhancers(
+  applyMiddleware(thunk)
+));
 
 const app = (
   <Provider store={store}>

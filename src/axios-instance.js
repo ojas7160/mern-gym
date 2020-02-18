@@ -9,6 +9,8 @@ instance.interceptors.request.use(request => {
     return request;
 })
 
+// instance.defaults.headers.common['Authorization'] = 'Auth Token From Instance'; // we can add headers in interceptors like this also
+
 instance.interceptors.response.use(res => res)
 
 //   componentWillUnmount() {

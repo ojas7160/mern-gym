@@ -26,4 +26,7 @@ const updateProfile = (id, data) => {
   return Axios.put(BaseURI + 'updateUser/' + id, data);
 }
 
-export default { getItem, getToken, setItem, getAllUsers, getUser, updateProfile };
+const changePassword = (data) => {
+  return Axios.post(BaseURI + 'changeUserPassword/',  data);
+}
+export default { getItem, getToken, setItem, getAllUsers, getUser, updateProfile, changePassword };

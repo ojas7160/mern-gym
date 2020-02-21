@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import "./ProfileComponent.css";
 import * as userService from "../../services/users-service/userService";
-import { Row, Col, Button, Form, Container, Spinner } from "react-bootstrap";
+import { Row, Col, Button, Form, Container } from "react-bootstrap";
 import moment from 'moment';
 import FontAwesome from 'react-fontawesome';
-import Datepicker from '../../components/Date-picker/DatePickerComponent';
-import EditFormComponent from '../../components/edit-form-component/EditFormComponent';
 // import * as userService  from '../../services/users-service/userService';
 
 class profile extends Component {

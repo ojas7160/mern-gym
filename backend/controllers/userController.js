@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const shortId = require('shortid');
 const mongoose = require('mongoose');
 
 exports.userLogin = (req, res, next) => {
@@ -97,10 +96,13 @@ exports.createUser = (req, res, next) => {
 }
 
 exports.getAllUsers = (req, res, next) => {
+  console.log(JSON.parse(req.query.page))
   User.find({}).
   then((users) => {
+    // console.log(users.skip((req.body.page - 1) * 10))
     res.json({
-      users: users
+      users: users.skip((JSON.parse(req.query.page) - 1) * 10).limit(10),
+      totalPages: Math.ceil(users.length/10)
     })
   })
   .catch(err => {
@@ -109,6 +111,20 @@ exports.getAllUsers = (req, res, next) => {
     })
   })
 }
+
+function skip(c){
+  return this.filter((x,i)=>{
+    if(i>(c-1)) {return true}
+  })
+}
+function limit(c){
+  return this.filter((x,i)=>{
+    if(i<=(c-1)) {return true}
+  })
+}
+  
+Array.prototype.limit=limit;
+Array.prototype.skip=skip;
 
 exports.getUser = (req, res, next) => {
   User.find({_id: req.params.id})

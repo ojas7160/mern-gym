@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './DashboardBodyComponent.css';
 
-const dashboardBody = (props) => {
-  if(props.students) {
+const DashboardBody = (props) => {
+  const [count, setCounter] = useState(0); // we can use state in functional component with useState -> count is initialised with 0 value and setCounter be as method in the state
 
+  const showCount = () => setCounter(count + 1)
+  if(props.students) {
+    console.log(props)
     var studentsbody = props.students
     .map(student => {
       return (
@@ -19,22 +22,26 @@ const dashboardBody = (props) => {
     });
   }
   return (
-    <table className="align-left mb-0 table table-borderless table-striped table-hover" style={{backgroundColor: 'white'}}>
-      <thead>
-        <tr>
-          <th>Membership Number</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Address</th>
-          <th>Is Active</th>
-        </tr>
-      </thead>
-      <tbody>
-        {studentsbody}
-      </tbody>
-    </table>
+    <div>
+      <table className="align-left mb-0 table table-borderless table-striped table-hover" style={{backgroundColor: 'white'}}>
+        <thead>
+          <tr>
+            <th>Membership Number</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Is Active</th>
+          </tr>
+        </thead>
+        <tbody>
+          {studentsbody}
+        </tbody>
+      </table>
+      <button onClick={showCount}>click</button>
+      <div>{count} times</div>
+    </div>
   )
 }
 
-export default dashboardBody;
+export default DashboardBody;

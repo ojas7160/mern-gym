@@ -21,7 +21,7 @@ const routes = (props) => {
         <Route path="/profile" exact component={ProfileComponent}/>
         <Route path="/users/:id" component={RegisterComponent}/>
         <Route path="/changePassword" component={ChangePasswordComponent}/>
-        <Route path="/login" component={() => <LoginComponent login={props.logout} handleSubmit={props.handleSubmit}/>} />
+        <Route path="/login" component={() => <LoginComponent login={props.logout} />} />
         <Route path="/not-found" component={NotFoundComponent} />
         <Route path = "/" exact component = {HomeComponent} />
         <Route path="**" component={NotFoundComponent} />

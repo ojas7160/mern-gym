@@ -14,8 +14,8 @@ const setItem = (itemName, item) => {
   return localStorage.setItem(itemName, item);
 }
 
-const getAllUsers = () => {
-  return Axios.get(BaseURI + 'getAllUsers');
+const getAllUsers = (page = 1) => {
+  return Axios.get(BaseURI + 'getAllUsers?page='+page);
 }
 
 const getUser = (id) => {
@@ -29,4 +29,8 @@ const updateProfile = (id, data) => {
 const changePassword = (data) => {
   return Axios.post(BaseURI + 'changeUserPassword/',  data);
 }
-export default { getItem, getToken, setItem, getAllUsers, getUser, updateProfile, changePassword };
+
+const loginUser = (data) => {
+  return Axios.post(BaseURI + 'login', { email: data.email, password: data.password });
+}
+export default { getItem, getToken, setItem, getAllUsers, getUser, updateProfile, changePassword, loginUser };

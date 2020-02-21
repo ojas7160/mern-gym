@@ -176,7 +176,7 @@ class Register extends Component {
               <form onSubmit={this.state.edit ? this.updateUser : this.onUserRegister}>
                 <div className="input-container">
                   
-                  {this.state.user.imagePath ? (<img src={this.state.user.imagePath} alt="image" height="200px" width='200px' />) : (<input
+                  {this.state.user.imagePath ? (<img src={this.state.user.imagePath} alt="profile pic" height="200px" width='200px' />) : (<input
                     type="file"
                     name="image"
                     value={(this.state.user.imagePath && this.state.user.imagePath.length) ? this.state.user.imagePath : ''}

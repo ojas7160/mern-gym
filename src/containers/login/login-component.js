@@ -1,141 +1,4 @@
-// import React, { Component } from 'react';
-// import './login-component.css';
-// import Axios from '../../axios-instance';
-// import toastr from 'toastr';
-// import FontAwesome from 'react-fontawesome'
-// import { withRouter } from 'react-router-dom';
-// import { connect } from 'react-redux';
-
-
-// class LoginComponent extends Component {
-//     constructor(props) {
-//         super(props)
-//         this.state = { email: '', password: '' , showDetails: false, emailValid:true, passwordValid: true, userDetail: {email: '', password: ''}, showPassword: false, authed: localStorage.getItem('token')};
-
-//         this.onchangeEmail = this.onchangeEmail.bind(this);
-//         this.onchangePassword = this.onchangePassword.bind(this);
-//         this.handleSubmit = this.handleSubmit.bind(this);
-//         console.log(this.props)
-//     }
-
-//     onchangeEmail(event) {
-//         this.setState({ email: event.target.value });
-//         if (!event.target.value.length) {
-//             this.setState({ showDetails: false, emailValid: false })
-//         }
-//         else {
-//             this.setState({ emailValid: true })
-//         }
-//     }
-
-//     onchangePassword(event) {
-//         this.setState({ password: event.target.value });
-//         if (!event.target.value.length) {
-//             this.setState({ showDetails: false, passwordValid: false })
-//         }
-//         else {
-//             this.setState({ passwordValid: true })
-//         }
-//     }
-
-//     handleSubmit(event) {
-//         this.setState((prevState) => {
-//             return { showDetails: true, userDetail: { email: prevState.email, password: prevState.password } }
-//         })
-
-//         Axios.post('/api/user/login', { email: this.state.email, password: this.state.password })
-//             .then((res) => {
-//                 toastr.success(res.data.message, 'Success!');
-//                 localStorage.setItem('loginUser', JSON.stringify(res.data.user));
-//                 localStorage.setItem('token', res.data.token)
-//                 this.props.onLogin(localStorage.getItem('token'));
-//                 this.props.history.push('/dashboard')
-//             })
-//             .catch((err) => {
-//                 if (err.response) {
-//                     toastr.error(err.response.data.message, 'Error');
-//                 }
-//             })
-//         event.preventDefault();
-//     }
-
-//     resetForm = () => {
-//         this.setState({ email: "", password: "", showDetails: false, emailValid: true, passwordValid: true })
-//     }
-//     showPassword = () => {
-//         this.setState(prevState => { return { showPassword: !prevState.showPassword } })
-//     }
-
-//     render() {
-//         return (
-//             <div className="fullHeight">
-//                 <div className="login-wrapper">
-//                     <div className="container">
-//                         <div className="card"></div>
-//                         <div className="card">
-//                             <h1 className="title">Login</h1>
-//                             <form onSubmit={this.handleSubmit}>
-//                                 <div className="input-container">
-//                                     <input type="email" name="email" value={this.state.email} onChange={this.onchangeEmail} required />
-//                                     <label>Email</label>
-//                                     <div className="bar"></div>
-//                                     {this.state.emailValid ? null : (<span className="error"> Email Address is Required </span>)}
-//                                 </div>
-//                                 <div className="input-container">
-//                                     <input type={this.state.showPassword ? 'text' : 'password'} name="password" value={this.state.password} onChange={this.onchangePassword} required="required" />
-//                                     <label>Password</label>
-//                                     {this.state.password ? 
-//                                     <FontAwesome
-//                                         className="passwordFieldIcon"
-//                                         name={this.state.showPassword ? 'eye-slash' : 'eye'}
-//                                         onClick={this.showPassword}
-//                                         style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)' }}
-//                                     />
-//                                     : null}
-//                                     <div className="bar"></div>
-//                                     {this.state.passwordValid ? null : (<span className="error"> Password is Required </span>)}
-//                                 </div>
-//                                 <div className="button-container">
-//                                     <input type="submit" value="Login" style={{ marginRight: '15px' }} disabled={!this.state.emailValid} />
-//                                     <input type="reset" value="Reset" onClick={this.resetForm} />
-//                                 </div>
-//                             </form>
-//                             {(this.state.showDetails) ? (<div className="displayLoginScreen">
-//                                 <h3> Entered Details </h3>
-//                                 <p> {this.state.userDetail.email} </p>
-//                                 <p> {this.state.userDetail.password} </p>
-//                             </div>) : null}
-//                         </div>
-
-//                     </div>
-//                 </div>
-//             </div>
-//         )
-//     }
-// }
-
-// // const mapStateToProps = state => {
-// //     return {
-// //         ctr: state.counter.counter,
-// //         storedResults: state.result.results
-// //     };
-// // }
-
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         onLogin: (authed) => dispatch({type: 'LOGIN', authed: authed})
-//         // onDecrementCounter: () => dispatch({type: 'DECREMENT'}),
-//         // onAdditionCounter: () => dispatch({type: 'ADDITION', value: 5, name: 'Ojas'}),
-//         // onSubtractionCounter: () => dispatch({type: 'SUBTRACTION', value: 5}),
-//         // onStoreResult: (result) => dispatch({type: 'STORE_RESULT', result: result}),
-//         // onDeleteResult: (id) => dispatch({type: 'DELETE_RESULT', resultId: id})
-//     }
-// }
-// export default connect(null, mapDispatchToProps)(withRouter(LoginComponent));
-
-
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -156,17 +19,9 @@ import { connect } from 'react-redux';
 import * as userService from '../../services/users-service/userService';
 
 const LoginComponent = (props) => {
-      
-  // constructor(props) {
-  //   super(props)
-  //   this.state = { email: '', password: '' , showDetails: false, emailValid:true, passwordValid: true, userDetail: {email: '', password: ''}, showPassword: false, authed: localStorage.getItem('token')};
+  let loginService;
+  var self = this;
 
-  //   this.onchangeEmail = this.onchangeEmail.bind(this);
-  //   this.onchangePassword = this.onchangePassword.bind(this);
-  //   this.handleSubmit = this.handleSubmit.bind(this);
-  //   console.log(this.props)
-  // }
-  
   function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
@@ -214,32 +69,12 @@ const LoginComponent = (props) => {
   const classes = useStyles();
   const [email, changeEmail] = useState('')
   const [password, changePassword] = useState('')
-  
-  // const changeEmail = (event) => {
-  //   this.setState({ email: event.target.value });
-  //   if (!event.target.value.length) {
-  //       this.setState({ showDetails: false, emailValid: false })
-  //   }
-  //   else {
-  //       this.setState({ emailValid: true })
-  //   }
-  // }
 
-  // const onchangePassword = (event) => {
-  //   this.setState({ password: event.target.value });
-  //   if (!event.target.value.length) {
-  //       this.setState({ showDetails: false, passwordValid: false })
-  //   }
-  //   else {
-  //       this.setState({ passwordValid: true })
-  //   }
-  // }
-
+  useEffect(() => {
+    // return loginService.unsubscribe();
+  })
   const handleSubmit = (event) => {
-    // this.setState((prevState) => {
-    //     return { showDetails: true, userDetail: { email: prevState.email, password: prevState.password } }
-    // })
-    userService.default.loginUser({email: email, password: password})
+    self.loginService = userService.default.loginUser({email: email, password: password})
     .then((res) => {
       toastr.success(res.data.message, 'Success!');
       localStorage.setItem('loginUser', JSON.stringify(res.data.user));

@@ -1,10 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './DashboardBodyComponent.css';
 
 const DashboardBody = (props) => {
+  // =========== React Hooks =====================
+
   const [count, setCounter] = useState(0); // we can use state in functional component with useState -> count is initialised with 0 value and setCounter be as method in the state
 
+  useEffect(() => { // it runs after every change like componentDidMount and componentWillUpdate or componentWillUnmount
+    document.title = `you clicked ${count} times`
+    return function cleanup() {
+      document.title = 'you clicked 0 times'; // componentWillUnmount will run only when there return function in useEffect
+    }
+  }, [count]) // only re-runs when count changes, this is optimization
+
   const showCount = () => setCounter(count + 1)
+  // =========== React Hooks end =====================
+
+  // =========== custom Hooks =================
+  // you can make your custom hook using react hooks
+  function useStatus (activeStatus) {
+    const [status, setStatus] = useState(null);
+    return status === 'loading' ? 'Loading' : 'Pending';
+  }
+
+  const onlineStatus = useStatus('active'); // custom hook
+  // =========== custom Hooks end =================
+
+  const inputEl = useRef(null); // it gives us the refernce to that element , just like refernce variable in angular
+  const onButtonClick = () => {
+    console.log(inputEl)
+    // `current` points to the mounted text input element
+    inputEl.current.focus();
+  };
   if(props.students) {
     console.log(props)
     var studentsbody = props.students
@@ -40,6 +67,9 @@ const DashboardBody = (props) => {
       </table>
       <button onClick={showCount}>click</button>
       <div>{count} times</div>
+      <div>{onlineStatus}</div>
+      <input ref={inputEl} type="text" />
+      <button onClick={onButtonClick}>Focus the input</button>
     </div>
   )
 }

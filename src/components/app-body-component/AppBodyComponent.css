@@ -41,3 +41,11 @@
 .block-content p {
   font-size: 22px;
 }
+
+.home {
+  background: url("../../assets/Gym-background-Small.jpg") center no-repeat;
+  height: 100%;
+  background-attachment: fixed;
+  background-size: cover;
+  padding-bottom: 25px;
+}

@@ -74,10 +74,11 @@ const LoginComponent = (props) => {
     // return loginService.unsubscribe();
   })
   const handleSubmit = (event) => {
-    self.loginService = userService.default.loginUser({email: email, password: password})
+    userService.default.loginUser({email: email, password: password})
     .then((res) => {
       toastr.success(res.data.message, 'Success!');
       localStorage.setItem('loginUser', JSON.stringify(res.data.user));
+      localStorage.setItem('userId', res.data.user._id);
       localStorage.setItem('token', res.data.token)
       props.onLogin(localStorage.getItem('token'));
       props.history.push('/dashboard')

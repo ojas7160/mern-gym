@@ -2,11 +2,12 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import DashboardComponent from '../../containers/dashboard-component/DashboardComponent';
 import HomeComponent from '../home-component/HomeComponent';
+import PostComponent from '../post-component/PostComponent';
 import NotFoundComponent from '../not-found/NotFoundComponent';
 import PrivateRoute from '../auth/route-guards/PrivateRoute';
 import LoginComponent from '../../containers/login/login-component'
 import RegisterComponent from '../../containers/register/register-component';
-// import UserComponent from '../user-component/UserComponent';
+import PostsComponent from '../../containers/posts-component/PostsComponent';
 import ProfileComponent from '../../containers/profile-component/ProfileComponent';
 import ChangePasswordComponent from '../../containers/change-password/changePasswordComponent';
 
@@ -19,6 +20,8 @@ const routes = (props) => {
         <PrivateRoute authed={authed} path='/dashboard' component={DashboardComponent} />
         <Route path="/users" exact component={RegisterComponent}/>
         <Route path="/profile" exact component={ProfileComponent}/>
+        <Route path="/posts" exact component={PostsComponent}/>
+        <Route path="/allPosts" exact component={PostComponent}/>
         <Route path="/users/:id" component={RegisterComponent}/>
         <Route path="/changePassword" component={ChangePasswordComponent}/>
         <Route path="/login" component={() => <LoginComponent login={props.logout} />} />

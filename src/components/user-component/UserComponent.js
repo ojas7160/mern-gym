@@ -9,7 +9,7 @@ class User extends Component {
     Axios.get('api/user/getUser/'+userId)
     .then(response => {
       console.log(response)
-      this.setState({user: response.data.user[0]})
+      this.setState({user: response.data.user})
     })
   }
 

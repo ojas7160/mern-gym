@@ -63,7 +63,8 @@ class DashboardComponent extends Component {
           address: student.address,
           email: student.email,
           id: student._id,
-          active: student.active
+          active: student.active,
+          imagePath: student.imagePath
         }
       })
       this.setState(prevState => { 

@@ -9,9 +9,9 @@ const DashboardBody = (props) => {
   useEffect(() => { // it runs after every change like componentDidMount and componentWillUpdate or componentWillUnmount
     document.title = `you clicked ${count} times`
     return function cleanup() {
-      document.title = 'you clicked 0 times'; // componentWillUnmount will run only when there return function in useEffect
+      // document.title = 'you clicked 0 times'; // componentWillUnmount will run only when there return function in useEffect
     }
-  }, [count]) // only re-runs when count changes, this is optimization
+  }, [count]) // only re-runs when count changes, this is optimization, or use [] instead -> it only runs one time
 
   const showCount = () => setCounter(count + 1)
   // =========== React Hooks end =====================
@@ -65,11 +65,11 @@ const DashboardBody = (props) => {
           {studentsbody}
         </tbody>
       </table>
-      <button onClick={showCount}>click</button>
+      {/* <button onClick={showCount}>click</button>
       <div>{count} times</div>
       <div>{onlineStatus}</div>
       <input ref={inputEl} type="text" />
-      <button onClick={onButtonClick}>Focus the input</button>
+      <button onClick={onButtonClick}>Focus the input</button> */}
     </div>
   )
 }

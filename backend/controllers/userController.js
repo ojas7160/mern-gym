@@ -127,8 +127,9 @@ Array.prototype.limit=limit;
 Array.prototype.skip=skip;
 
 exports.getUser = (req, res, next) => {
-  User.find({_id: req.params.id})
+  User.findOne({_id: req.params.id})
   .then(user => {
+    console.log(user)
     res.json({
       message: 'Success',
       user: user

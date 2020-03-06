@@ -1,0 +1,23 @@
+.full-width {
+  width: 100%;
+}
+
+.form-div {
+  margin-top: 20px !important;
+  padding: 12px;
+  box-shadow: 2px 2px 0px 0px #eee;
+}
+
+.bg-img {
+  background: url('../../assets/images/44-444287_leon-martinez-high-resolution-gym-background.jpg') center no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100%;
+}
+
+.post-heading {
+  color: white;
+  font-weight: bold;
+  font-size: 60px;
+  text-shadow: 2px 2px 3px #ccc;
+}

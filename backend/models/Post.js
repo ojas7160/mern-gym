@@ -6,7 +6,7 @@ const postSchema = mongoose.Schema({
   description: {type: String},
   addedOn: {type: Date},
   userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  likes: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+  likes: [{type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true}]
 }, { timestamps: { createdAt: 'createdAt' } })
 
 module.exports = mongoose.model('Post', postSchema)

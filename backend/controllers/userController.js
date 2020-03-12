@@ -97,9 +97,8 @@ exports.createUser = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
   console.log(JSON.parse(req.query.page))
-  User.find({}).
-  then((users) => {
-    // console.log(users.skip((req.body.page - 1) * 10))
+  User.aggregate([{$lookup: {from: "posts", localField: "_id", foreignField: "userId", as: "posts"}}])
+  .then(users => {
     res.json({
       users: users.skip((JSON.parse(req.query.page) - 1) * 10).limit(10),
       totalPages: Math.ceil(users.length/10)
@@ -205,8 +204,7 @@ exports.changeUserPassword = (req, res, next) => {
       return res.status(401).json({
         message: 'User not found for the id.'
       })
-    }
-
+    } 
     fetchedUser = user;
   }).
   then(result => {

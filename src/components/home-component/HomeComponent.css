@@ -1,0 +1,8 @@
+.home {
+  background: url("../../assets/Gym-background-Small.jpg") center no-repeat;
+  height: 100%;
+  background-attachment: fixed;
+  background-size: cover;
+  /* padding-bottom: 25px; */
+  padding: 25px;
+}

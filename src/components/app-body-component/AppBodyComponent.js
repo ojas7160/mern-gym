@@ -8,7 +8,7 @@ class appBody extends Component {
 
   render() {
     return (
-      <div className="home">
+      <div>
         <div className="div-style">
           <Carousel>
             <Carousel.Item>

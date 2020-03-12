@@ -34,7 +34,6 @@ class DashboardComponent extends Component {
       // Checks that the page has scrolled to the bottom
       
       console.log(this.state.page)
-      
       if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
         this.setState(prevState => {
           return { page: prevState.page + 1}
@@ -43,16 +42,27 @@ class DashboardComponent extends Component {
           this.getAllUsers();
         }
       }
+     
       
     }, 100);
   }
 
+  handleScroll = () => {
+    console.log('hello')
+    
+    
+  }
+
   componentDidMount(){
+    // window.addEventListener('scroll', () => {
+    //   console.log('hello')
+    // });
     this.getAllUsers();
   }
 
   getAllUsers(){
     // let page = 3
+    // console.log(page)
     userService.default.getAllUsers(this.state.page)
     .then(res => {
       let students = res.data.users.map(student => {
@@ -116,7 +126,7 @@ class DashboardComponent extends Component {
                 releaseToRefreshContent={
                   <h3 style={{textAlign: 'center'}}>&#8593; Release to refresh</h3>
                 }> */}
-                <DashboardBodyComponent students={this.state.students} openUser={(id) => this.openUser(id)} />
+                <DashboardBodyComponent students={this.state.students} openUser={(id) => this.openUser(id)}/>
               {/* </InfiniteScroll> */}
               </div>
               <div className="d-block text-center card-footer">

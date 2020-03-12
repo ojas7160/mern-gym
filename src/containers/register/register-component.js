@@ -295,7 +295,7 @@
 // export default withRouter(Register);
 // // (axiosInterceptor(Register, Axios))
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -305,10 +305,25 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import Axios from "../../axios-instance";
+import toastr from "toastr";
+import { 
+  FormControl,
+  InputLabel,
+  Select } from '@material-ui/core';
+import 'date-fns';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import DateFnsUtils from '@date-io/date-fns';
+import { withRouter } from 'react-router-dom';
+import * as userService from '../../services/users-service/userService';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
 function Copyright() {
   return (
@@ -343,9 +358,107 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignUp() {
-  const classes = useStyles();
 
+
+const SignUp = (props) => {
+  const classes = useStyles();
+  let form = new FormData();
+
+  const [edit, changeEdit] = useState(false);
+  const [age, changeAge] = useState(0);
+  const [state, setState] = useState(
+    { email: '',
+    password: '',
+    feesSubmissionDate: new Date(),
+    name: '',
+    admissionType: '',
+    phone: '',
+    address: '',
+    membershipNumber: '',
+    imagePath: '',
+    userId: '' }
+  )
+  
+  
+  const inputLabel = React.useRef(null);
+  const [labelWidth, setLabelWidth] = React.useState(0);
+  React.useEffect(() => {
+    setLabelWidth(inputLabel.current.offsetWidth);
+  }, []);
+
+
+  useEffect(() => {
+    if(props.match.params.id) {
+      changeEdit(true)
+      setState({...state, userId: props.match.params.id})
+      userService.default.getUser(props.match.params.id)
+      .then(response => {
+        console.log(response)
+        response.data.user.feesSubmissionDate = new Date(response.data.user.feesSubmissionDate)
+        setState(response.data.user)
+        // this.setState(prevState => {return {...this.state, user: response.data.user} })
+        console.log(state)
+      })
+    } else {
+      changeEdit(false);
+      setState({})
+    }
+  }, [])
+  const handleDataChange = (event, input) => {
+    input == 'feesSubmissionDate' ? setState({...state, [input]: event}) : setState({...state, [input]: event.target.value});
+  };
+
+  const handleChange = (input) => {
+    console.log(input)
+  }
+
+  const onUserRegister = (event) => {
+    console.log("TCL: Register -> onUserRegister -> event", event)
+    // console.log({ name: this.state.user.name, membershipnumber: this.state.user.membershipnumber, email: this.state.user.email, password: this.state.user.password, admissionType: this.state.user.admissionType, fee: this.state.user.fee, isActive: this.state.user.isActive, phone: this.state.user.phone, address: this.state.user.address });
+    form.append('name', state.name);
+    form.append('email', state.email);
+    form.append('admissionType', state.admissionType);
+    form.append('phone', state.phone);
+    form.append('address', state.address);
+    form.append('password', state.password);
+    form.append('feesSubmissionDate', state.feesSubmissionDate);
+    
+    Axios.post("/api/user/signup", form)
+      .then(res => {
+      console.log("TCL: Register -> onUserRegister -> res", res)
+        toastr.success(res.data.message, "Success!");
+        props.history.push("/login");
+      })
+      .catch(err => {
+        if (err.response) {
+          // toastr.error(err.response.data.error.errmsg, "Error");
+        }
+      });
+    event.preventDefault();
+  }
+
+  const updateUser = (event) => {
+    Axios.put("/api/user/updateUser/"+ props.match.params.id, {
+      name: state.name,
+      email: state.email,
+      admissionType: state.admissionType,
+      feesSubmissionDate: state.feesSubmissionDate,
+      phone: state.phone,
+      address: state.address,
+      imagePath: state.imagePath
+    })
+    .then(res => {
+      console.log(res)
+      toastr.success(res.data.message, "Success!");
+      // this.props.history.push("/login");
+    })
+    .catch(err => {
+      if (err.response) {
+        toastr.error(err.response.data.error.errmsg, "Error");
+      }
+    });
+    event.preventDefault();
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -354,31 +467,34 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          {edit ? 'Update' : 'Register'}
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={edit ? updateUser : onUserRegister}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
-                name="firstName"
+                name="name"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="name"
+                label="Name"
                 autoFocus
+                value={state.name}
+                onChange={($event) => handleDataChange($event, 'name')}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                required
+                disabled
                 fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
+                id="membershipNumber"
+                label="Membership Number"
+                name="membershipNumber"
                 autoComplete="lname"
+                value={state.membershipNumber}
               />
             </Grid>
             <Grid item xs={12}>
@@ -390,6 +506,8 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={state.email}
+                onChange={($event) => handleDataChange($event, 'email')}
               />
             </Grid>
             <Grid item xs={12}>
@@ -401,13 +519,78 @@ export default function SignUp() {
                 label="Password"
                 type="password"
                 id="password"
+                value={state.password}
                 autoComplete="current-password"
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  disableToolbar
+                  autoOk
+                  inputVariant="outlined"
+                  variant="inline"
+                  format="dd/MM/yyyy"
+                  margin="normal"
+                  id="date-picker-inline"
+                  label="Fees submission"
+                  style={{width: '100%'}}
+                  value={state.feesSubmissionDate}
+                  onChange={($event) => handleDataChange($event, 'feesSubmissionDate')}
+                  KeyboardButtonProps={{
+                    'aria-label': 'change date',
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl variant="outlined" className={classes.formControl} style={{width: '100%'}}>
+                <InputLabel ref={inputLabel} htmlFor="outlined-age-native-simple">
+                  Age
+                </InputLabel>
+                <Select
+                  native
+                  value={state.admissionType}
+                  onChange={($event) => handleDataChange($event, 'admissionType')}
+                  labelWidth={labelWidth}
+                  inputProps={{
+                    name: 'age',
+                    id: 'outlined-age-native-simple',
+                  }}
+                >
+                  <option value="" name="admissionType" disabled>
+                    Admission Type
+                  </option>
+                  <option value="annually"> Annualy </option>
+                  <option value="quarterly"> Quarterly </option>
+                  <option value="monthly"> Monthly </option>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="phone"
+                label="Phone"
+                id="phone"
+                value={state.phone}
+                onChange={($event) => handleDataChange($event, 'phone')}
+                autoComplete="phone"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="address"
+                label="Address"
+                id="address"
+                value={state.address}
+                onChange={($event) => handleDataChange($event, 'address')}
+                autoComplete="address"
               />
             </Grid>
           </Grid>
@@ -418,15 +601,15 @@ export default function SignUp() {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            {edit ? 'Update' : 'Sign up' }
           </Button>
-          <Grid container justify="flex-end">
+          { !edit ? (<Grid container justify="flex-end">
             <Grid item>
               <Link href="#" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
-          </Grid>
+          </Grid>) : null }
         </form>
       </div>
       <Box mt={5}>
@@ -435,3 +618,5 @@ export default function SignUp() {
     </Container>
   );
 }
+
+export default withRouter(SignUp);

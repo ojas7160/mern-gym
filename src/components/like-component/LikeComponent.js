@@ -8,7 +8,7 @@ const Like = (props) => {
   const post = props.post
   return (
     <div className="d-flex position-bottom">
-      <span>{props.post.likes.length}<FontAwesomeIcon className="icon-design cursor-pointer" onClick={() => props.like(post)} icon={faThumbsUp} /></span>
+      <span>{(props.post.likes && props.post.likes.length) ? props.post.likes.length : 0}<FontAwesomeIcon className="icon-design cursor-pointer" onClick={() => props.like(post)} icon={faThumbsUp} /></span>
     </div>
   )
 }

@@ -34,27 +34,11 @@ exports.createPost = (req, res, next) => {
 }
 
 exports.getAllPosts = (req, res, next) => {
-  Post.find({})
+  Post.aggregate( [{ $lookup: {
+    from: 'comments', localField: '_id', foreignField: 'postId', as: 'comments'
+  } }, { $lookup: {from: 'likes', localField: '_id', foreignField: 'postId', as: 'likes'} } ])
   .then(posts => {
     if(posts && posts.length) {
-      // posts.forEach(post => { 
-      //   console.log(post)
-      //   Like.find({postId: post._id})
-      //   .then(likes => {
-      //     console.log(likes)
-      //     post['likes'] = (likes && likes.length) ? likes : []
-      //     completePosts.push(post)
-      //   }, err => {
-      //     res.json({
-      //       message: err
-      //     })
-      //   })
-      //   .catch(error => {
-      //     res.json({
-      //       message: error
-      //     })
-      //   })
-      // })
       res.json({
         message: 'All posts',
         posts: posts
@@ -78,7 +62,11 @@ exports.getAllPosts = (req, res, next) => {
 }
 
 exports.getMyPosts = (req, res, next) => {
-  Post.find({userId: req.body.userId})
+  Post.aggregate( [
+    { $match: { userId: req.body.userId } },
+    { $lookup: { from: 'likes', localField: '_id', foreignField: 'postId', as: 'likes' } },
+    { $lookup: { from: 'comments', localField: '_id', foreignField: 'postId', as: 'comments' } }  
+  ] )
   .then(posts => {
     if(posts && posts.length) {
       res.json({

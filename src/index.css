@@ -6,7 +6,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  overflow: hidden;
 }
 
 code {
@@ -40,5 +39,5 @@ code {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  /* background: #000;  */
+
 }

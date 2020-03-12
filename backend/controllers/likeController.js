@@ -4,54 +4,49 @@ const User = require('../models/User');
 
 exports.like = (req, res, next) => {
   let canLike = true;
-  Post.aggregate([{$lookup: {from: "users", localField: "userId", foreignField: "_id", as: "users"}}])
+  
+  Post.findOne({_id: req.body.postId})
   .then(post => {
-    res.json({
-      post: post
+    console.log(post.likes)
+    console.log(post.likes.indexOf(req.body.userId))
+    if(post.likes && post.likes.length) {
+      if(post.likes.indexOf(req.body.userId) > -1) {
+        canLike = false;
+      }
+    }
+
+    const updateQuery = (user) => {
+      return canLike ? { $push: {likes: user._id} } : { $pop: {likes: -1 } }
+    } 
+
+    User.findOne({_id: req.body.userId})
+    .then(user => {
+      Post.update({_id: req.body.postId}, updateQuery(user))
+      .then(post => {
+        res.json({
+          message: 'Success'
+        })
+      }, err => {
+        res.json({
+          message: err
+        })
+      })
+      .catch(error => {
+        res.json({
+          message: error
+        })
+      })
+    }, err => {
+      res.json({
+        message: err
+      })
+    })
+    .catch(error => {
+      res.json({
+        message: error
+      })
     })
   })
-  // Post.findOne({_id: req.body.postId})
-  // .then(post => {
-  //   console.log(post.likes)
-  //   console.log(post.likes.indexOf(req.body.userId))
-  //   if(post.likes && post.likes.length) {
-  //     if(post.likes.indexOf(req.body.userId) > -1) {
-  //       canLike = false;
-  //     }
-  //   }
-
-  //   const updateQuery = (user) => {
-  //     return canLike ? { $push: {likes: user._id} } : { $pop: {likes: -1 } }
-  //   } 
-
-  //   User.findOne({_id: req.body.userId})
-  //   .then(user => {
-  //     Post.update({_id: req.body.postId}, updateQuery(user))
-  //     .then(post => {
-  //       res.json({
-  //         message: 'Success'
-  //       })
-  //     }, err => {
-  //       res.json({
-  //         message: err
-  //       })
-  //     })
-  //     .catch(error => {
-  //       res.json({
-  //         message: error
-  //       })
-  //     })
-  //   }, err => {
-  //     res.json({
-  //       message: err
-  //     })
-  //   })
-  //   .catch(error => {
-  //     res.json({
-  //       message: error
-  //     })
-  //   })
-  // })
 }
 
 exports.disLike = (req, res, next) => {

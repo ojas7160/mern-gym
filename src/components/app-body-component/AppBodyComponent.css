@@ -1,10 +1,11 @@
 .div-style {
   background-color: white;
-  margin: 25px 100px;
+  /* margin: 25px 100px; */
   padding: 5px;
   border-radius: 10px;
   height: calc(100vh - 125px);
   align-content: center;
+  margin-bottom: 25px;
 }
 
 .div-style:last-child {
@@ -42,10 +43,3 @@
   font-size: 22px;
 }
 
-.home {
-  background: url("../../assets/Gym-background-Small.jpg") center no-repeat;
-  height: 100%;
-  background-attachment: fixed;
-  background-size: cover;
-  padding-bottom: 25px;
-}

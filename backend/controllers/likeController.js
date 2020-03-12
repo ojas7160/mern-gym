@@ -4,81 +4,41 @@ const User = require('../models/User');
 
 exports.like = (req, res, next) => {
   let canLike = true;
-  
-  Post.findOne({_id: req.body.postId})
-  .then(post => {
-    console.log(post.likes)
-    console.log(post.likes.indexOf(req.body.userId))
-    if(post.likes && post.likes.length) {
-      if(post.likes.indexOf(req.body.userId) > -1) {
-        canLike = false;
-      }
+  Like.findOne({$and: [{userId: req.body.userId}, {postId: req.body.postId}] })
+  .then(like => {
+    if(like && Object.keys(like).length) {
+      canLike = false;
+      Like.deleteOne({_id: like._id})
+      .then(deletedLike => {
+        
+      })
     }
-
-    const updateQuery = (user) => {
-      return canLike ? { $push: {likes: user._id} } : { $pop: {likes: -1 } }
-    } 
-
-    User.findOne({_id: req.body.userId})
-    .then(user => {
-      Post.update({_id: req.body.postId}, updateQuery(user))
-      .then(post => {
+    if(canLike) {
+      const like = new Like({postId: req.body.postId, userId: req.body.userId})
+    
+      like.save()
+      .then(like => {
         res.json({
-          message: 'Success'
+          success: true,
+          message: 'liked'
         })
       }, err => {
         res.json({
-          message: err
+          success: false,
+          error: err
         })
       })
       .catch(error => {
         res.json({
-          message: error
+          success: false,
+          error: error
         })
       })
-    }, err => {
+    } else {
       res.json({
-        message: err
+        success: true,
+        message: 'like removed'
       })
-    })
-    .catch(error => {
-      res.json({
-        message: error
-      })
-    })
-  })
-}
-
-exports.disLike = (req, res, next) => {
-  Like.find({$and: [{userId: req.body.userId}, {postId: req.body.postId}] })
-  .then(like => {
-    Like.delete({_id: like._id})
-    .then(response => {
-      res.json({
-        message: 'Disliked',
-        success: true
-      })
-    }, err => {
-      res.json({
-        message: err,
-        success: false
-      })
-    }).catch(error =>  {
-      res.json({
-        message: error,
-        success: false
-      })
-    })
-  }, err => {
-    res.json({
-      message: err,
-      success: false
-    })
-  })
-  .catch(error => {
-    res.json({
-      message: error,
-      success: false
-    })
+    }
   })
 }

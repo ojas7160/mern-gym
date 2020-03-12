@@ -61,6 +61,9 @@ class HeaderComponent extends Component {
             <Nav.Item className="mr-15">
               <NavLink activeClassName="active" className="color-white" to='/dashboard'>Dashboard</NavLink>
             </Nav.Item>
+            <Nav.Item className="mr-15">
+              <NavLink activeClassName="active" className="color-white" to='/posts'>Posts</NavLink>
+            </Nav.Item>
           </Nav>
           <Nav className="justify-content-end">
             <Nav.Item className="mr-15">

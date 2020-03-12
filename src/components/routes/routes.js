@@ -20,8 +20,7 @@ const routes = (props) => {
         <PrivateRoute authed={authed} path='/dashboard' component={DashboardComponent} />
         <Route path="/users" exact component={RegisterComponent}/>
         <Route path="/profile" exact component={ProfileComponent}/>
-        <Route path="/posts" exact component={PostsComponent}/>
-        <Route path="/allPosts" exact component={PostComponent}/>
+        <PrivateRoute authed={authed} path='/posts' component={PostsComponent} />
         <Route path="/users/:id" component={RegisterComponent}/>
         <Route path="/changePassword" component={ChangePasswordComponent}/>
         <Route path="/login" component={() => <LoginComponent login={props.logout} />} />

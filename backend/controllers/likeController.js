@@ -4,11 +4,12 @@ const User = require('../models/User');
 
 exports.like = (req, res, next) => {
   let canLike = true;
-  Like.findOne({$and: [{userId: req.body.userId}, {postId: req.body.postId}] })
-  .then(like => {
-    if(like && Object.keys(like).length) {
+  // .remove()
+  Like.find({$and: [{userId: req.body.userId}, {postId: req.body.postId}] })
+  .then(likes => {
+    if(likes && likes.length) {
       canLike = false;
-      Like.deleteOne({_id: like._id})
+      Like.deleteMany({_id: likes._id})
       .then(deletedLike => {
         
       })

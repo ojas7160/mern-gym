@@ -10,11 +10,13 @@ import './assets/css/font-awesome.min.css';
 import thunk from 'redux-thunk';
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import loginReducer from './store/reducers/login-reducer';
+import postReducer from './store/reducers/post-reducer';
 import { Provider } from 'react-redux';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
-  loginReducer: loginReducer
+  loginReducer: loginReducer,
+  postReducer: postReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(

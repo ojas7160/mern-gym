@@ -6,6 +6,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock } from '@fortawesome/free-solid-svg-icons'
 import LikeComponent from '../like-component/LikeComponent';
+import { connect } from 'react-redux';
 import * as likeService from '../../services/likes-service/likeService';
 
 const Post = (props) => {
@@ -15,13 +16,33 @@ const Post = (props) => {
     likeService.default.like({postId: data._id, userId: userId})
     .then(response => {
       console.log(response)
+      if(response.data.added) {
+        post.likes.push(response.data.like)
+      } else {
+        post.likes.splice(0, 1)
+      }
+      setPost(post)
+      setPosts(props.posts.map(thisPost => {
+        if(thisPost._id === post._id) {
+          thisPost = post
+        }
+        return thisPost
+      }))
+      props.getUpdatedPost(props.posts);
     })
   }
 
   const [userId, setUserId] = useState('');
+  const [post, setPost] = useState({});
+  const [posts, setPosts] = useState([]);
+  
   useEffect(() => {
     setUserId(localStorage.getItem('userId'))
+    setPost(props.children)
+    setPosts(props.posts)
+    // props.onInitPost(props.children);
   }, [])
+  // const {posts} =props
   return (
     <div className="card-design">
       <Container style={{height: '100%', margin: '0px'}}>
@@ -41,7 +62,7 @@ const Post = (props) => {
             </Row>
           </Col>
         </Row>
-      </Container>
+      </Container> 
       {/* <Grid container spacing={3} style={{height: '100%', margin: '0px'}}>
         <Grid item xs={2} className="img-wrap">
         </Grid>
@@ -53,4 +74,17 @@ const Post = (props) => {
   )
 }
 
-export default Post;
+const mapPropsToDispatch = (dispatch) => {
+  return {
+    getUpdatedPost: (posts) => dispatch({type: 'UPDATE_POSTS', posts: posts})
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    post: state.postReducer.post,
+    posts: state.postReducer.posts
+  }
+}
+
+export default connect(mapStateToProps, mapPropsToDispatch)(Post);

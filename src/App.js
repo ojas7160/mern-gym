@@ -100,10 +100,15 @@ class App extends Component {
 
   }
 
-  logout = () => {
+  thisLogout = () => {
+    console.log('here')
     localStorage.clear();
-    this.setState({isLogout: true, authed: null})
-    this.props.history.push('/login');
+    // this.setState({isLogout: true, authed: null})
+    // this.props.history.push('/login');
+  }
+
+  abc = () => {
+    console.log('abc')
   }
 
   login = () => {
@@ -115,8 +120,8 @@ class App extends Component {
   render() {   
     return (
       <div className="App">
-        <HeaderComponent logout={this.logout} authed={this.state.authed}/>
-        <Routes logout={this.state.isLogout} handleSubmit={this.handleSubmit}/>
+        <HeaderComponent thisLogout={this.thisLogout} abc={this.abc} authed={this.state.authed} />
+        <Routes logout={this.state.isLogout} handleSubmit={this.handleSubmit} />
       </div>
     );
   }

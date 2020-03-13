@@ -4,6 +4,7 @@ import './PostsComponent.css';
 import { Grid, Container, TextField, Button } from '@material-ui/core';
 import * as postService from '../../services/posts-service/postService';
 import PostComponent from '../../components/post-component/PostComponent';
+import { connect } from 'react-redux';
 
 const Posts  = (props) => {
   
@@ -24,11 +25,13 @@ const Posts  = (props) => {
     .then(res => {
       console.log(res.data.posts)
       setPosts(res.data.posts)
+      props.onInitPost(res.data.posts);
     })
   }
 
   useEffect(() => {
     getAllPosts();
+    setPosts(props.posts)
   }, [])
   const classes = useStyles();
   const [title, setTitle] = useState('');
@@ -67,6 +70,7 @@ const Posts  = (props) => {
     console.log(form)
   }
 
+  console.log(props.posts)
   return (
     <div className={'bg-img ' + classes.root}>
       <div className="text-center">
@@ -75,9 +79,9 @@ const Posts  = (props) => {
         </h1>
       </div>
       <div className="container" style={{ height: '82vh', overflowY: 'scroll'}}> 
-        {posts.map(post => {
+        {props.posts.map((post,i) => {
           return (
-            <div key={post._id}>
+            <div key={i}>
               <PostComponent>{post}</PostComponent>
             </div>  
           )
@@ -106,4 +110,18 @@ const Posts  = (props) => {
 
   }
 
-export default Posts;
+
+  const mapPropsToDispatch = (dispatch) => {
+    return {
+      //getUpdatedPost: (post) => dispatch({type: 'UPDATE_POST', post: post}),
+      onInitPost: (posts) => dispatch({type: 'ONINIT_POSTS', posts: posts})
+    }
+  }
+   
+  const mapStateToProps = (state) => {
+    return {
+      posts: state.postReducer.posts
+    }
+  }
+  
+  export default connect(mapStateToProps, mapPropsToDispatch)(Posts);

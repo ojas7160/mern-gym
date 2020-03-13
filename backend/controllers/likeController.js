@@ -8,37 +8,37 @@ exports.like = (req, res, next) => {
   Like.find({$and: [{userId: req.body.userId}, {postId: req.body.postId}] })
   .then(likes => {
     if(likes && likes.length) {
-      canLike = false;
-      Like.deleteMany({_id: likes._id})
-      .then(deletedLike => {
-        
+      Like.deleteMany({$and: [{userId: req.body.userId}, {postId: req.body.postId}] }) 
+      .then(deletedLikes => {
+        res.json({
+          message: 'likes removed',
+          added: false,
+          success: true
+        })
       })
-    }
-    if(canLike) {
-      const like = new Like({postId: req.body.postId, userId: req.body.userId})
-    
+    } else {
+      const like = new Like({postId: req.body.postId, userId: req.body.userId})    
       like.save()
       .then(like => {
         res.json({
           success: true,
-          message: 'liked'
+          message: 'liked',
+          added: true,
+          like: like
         })
       }, err => {
         res.json({
           success: false,
+          added: false,
           error: err
         })
       })
       .catch(error => {
         res.json({
           success: false,
+          added: false,
           error: error
         })
-      })
-    } else {
-      res.json({
-        success: true,
-        message: 'like removed'
       })
     }
   })

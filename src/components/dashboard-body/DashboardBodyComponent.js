@@ -8,7 +8,7 @@ const DashboardBody = (props) => {
   const [count, setCounter] = useState(0); // we can use state in functional component with useState -> count is initialised with 0 value and setCounter be as method in the state
   const [page, setPage] = useState(1);
   useEffect(() => { // it runs after every change like componentDidMount and componentWillUpdate or componentWillUnmount
-    document.title = `you clicked ${count} times`
+    // document.title = `you clicked ${count} times`
     return function cleanup() {
       // document.title = 'you clicked 0 times'; // componentWillUnmount will run only when there return function in useEffect
     }

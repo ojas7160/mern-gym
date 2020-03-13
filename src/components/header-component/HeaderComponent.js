@@ -30,7 +30,9 @@ class HeaderComponent extends Component {
   logout = () => {
     localStorage.clear();
     this.setState({authed: null});
-    this.props.logout();
+    console.log(this.props);
+    this.props.thisLogout();
+    console.log(this.props.abc);
     this.props.history.push('/login');
   }
 

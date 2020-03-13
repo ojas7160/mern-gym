@@ -8,11 +8,21 @@
 }
 
 .icon-design {
-  color: #1e7e34;
   margin-left: 4px;
-  opacity: 0.8;
   position: relative;
   bottom: 2px;
+}
+
+.before-like { 
+  color: #adadad;
+  opacity: 0.8;
+  text-shadow: -3px -8px 9px #f78aa0
+}
+
+.after-like {
+  color: red;
+  opacity: 0.8;
+  text-shadow: -3px -8px 9px #f78aa0
 }
 
 .cursor-pointer {

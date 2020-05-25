@@ -2,8 +2,11 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const atob = require('atob');
 
 exports.userLogin = (req, res, next) => {
+  console.log(req.body)
+  console.log(atob(req.body.password))
   let fetchedUser;
   User.findOne({email: req.body.email}).
   then((user) => {
@@ -15,7 +18,7 @@ exports.userLogin = (req, res, next) => {
     }
 
     fetchedUser = user;
-    return bcrypt.compare(req.body.password, user.password);
+    return bcrypt.compare(atob(req.body.password), user.password);
   }).
   then((result) => {
     console.log(result)

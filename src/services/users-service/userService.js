@@ -31,6 +31,6 @@ const changePassword = (data) => {
 }
 
 const loginUser = (data) => {
-  return Axios.post(BaseURI + 'login', { email: data.email, password: data.password });
+  return Axios.post(BaseURI + 'login', { email: data.email, password: btoa(data.password) });
 }
 export default { getItem, getToken, setItem, getAllUsers, getUser, updateProfile, changePassword, loginUser };
